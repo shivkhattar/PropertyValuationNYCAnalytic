@@ -12,7 +12,7 @@ object SubwayClean extends Clean {
       .filter(_.length == 6)
       .map(x => (x(1), x(2), x(3), x(4)))
 
-    val cleanedSubway = rowsRemoved.filter(tup => !tup._1.isBlank && !tup._2.isBlank && !tup._3.isBlank)
+    val cleanedSubway = rowsRemoved.filter(tup => !tup._1.isEmpty && !tup._2.isEmpty && !tup._3.isEmpty)
       .map(tup => (tup._1, tup._2, getSplitValue(tup._3, true), getSplitValue(tup._3, false), CommonUtil.updateValueIfBlank(tup._4)))
       .map(tup => tup.toString.substring(1, tup.toString.length - 1))
     println(cleanedSubway.count())

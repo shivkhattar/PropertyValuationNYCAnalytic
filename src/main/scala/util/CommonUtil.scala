@@ -11,7 +11,7 @@ object CommonUtil {
   }
 
   def isBlank(value: String): Boolean = {
-    value.isBlank
+    value.isEmpty
   }
 
   def deleteFolderIfAlreadyExists(hdfs: FileSystem, outputPath: String): Unit =

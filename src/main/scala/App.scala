@@ -23,7 +23,7 @@ object App {
     val subwayOutputPath = "data/output/cleaned/subway"
     val cleanedSubway = SubwayClean.clean(sc, hdfs, subwayInputPath, subwayOutputPath)
 
-    val crimeProfileOutputPath = "data/output/cleaned/crime"
+    val crimeProfileOutputPath = "data/output/profile/crime"
     // CrimeProfile.profile(sc, crimeOutputPath, crimeProfileOutputPath)
 
     val subwayProfileOutputPath = "data/output/profile/subway"
