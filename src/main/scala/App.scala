@@ -23,7 +23,7 @@ object App {
     var now = System.currentTimeMillis()
     val crimeInputPath = path + CRIME_PATH
     val crimeOutputPath = path + CLEANED_CRIME_PATH
-    //CrimeClean.clean(sc, hdfs, crimeInputPath, crimeOutputPath)
+    CrimeClean.clean(sc, hdfs, crimeInputPath, crimeOutputPath)
     println("Crime Cleaning took: " + (System.currentTimeMillis() - now) + " msecs")
 
     now = System.currentTimeMillis()
