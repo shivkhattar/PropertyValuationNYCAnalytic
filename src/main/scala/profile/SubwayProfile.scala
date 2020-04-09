@@ -4,7 +4,7 @@ import org.apache.hadoop.fs.FileSystem
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
 import util.CommonUtil
-import util.CommonConstants.{SPLIT_REGEX, OBJECT_ID, SUBWAY_LINE, LATITUDE, LONGITUDE, STATION_NAME, PROFILER_SEPARATOR, SUBWAY_LINE_SEPERATOR, SUBWAY_PROFILE_PATHS, DISTINCT_SUBWAY_LINES_KEY, NAME_LENGTH_RANGE_KEY, COUNT_KEY}
+import util.CommonConstants.{SPLIT_REGEX, OBJECT_ID, SUBWAY_LINE, LATITUDE, LONGITUDE, STATION_NAME, PROFILER_SEPARATOR, SUBWAY_LINE_SEPERATOR, SUBWAY_PROFILE_PATHS, DISTINCT_SUBWAY_LINES_KEY, NAME_LENGTH_RANGE_KEY, COUNT_KEY, DISTINCT_SUBWAY_LINES}
 
 object SubwayProfile extends Profile {
 
@@ -13,17 +13,20 @@ object SubwayProfile extends Profile {
       .map(_.split(SPLIT_REGEX))
       .map(x => Map(OBJECT_ID -> x(0), STATION_NAME -> x(1), LATITUDE -> x(2), LONGITUDE -> x(2), SUBWAY_LINE -> x(4)))
 
-    val count = getTotalCount(data)
-    val nameLengthRange = getNameLengthRange(data)
-    val subwayLines = data.flatMap(row => row(SUBWAY_LINE).split(SUBWAY_LINE_SEPERATOR))
-    val distinctSubwayLines = getDistinctSubwayLines(subwayLines)
-    val countOfSubwayLines = getCountOfSubwayLines(subwayLines)
-
     CommonUtil.deleteFolderIfAlreadyExists(hdfs, outputPath)
 
-    val combined = count.union(nameLengthRange).union(distinctSubwayLines)
-    combined.saveAsTextFile(outputPath + SUBWAY_PROFILE_PATHS(OBJECT_ID))
+    val count = getTotalCount(data)
+    count.saveAsTextFile(outputPath + SUBWAY_PROFILE_PATHS(OBJECT_ID))
 
+    val nameLengthRange = getNameLengthRange(data)
+    nameLengthRange.saveAsTextFile(outputPath + SUBWAY_PROFILE_PATHS(STATION_NAME))
+
+    val subwayLines = data.flatMap(row => row(SUBWAY_LINE).split(SUBWAY_LINE_SEPERATOR))
+
+    val distinctSubwayLines = getDistinctSubwayLines(subwayLines)
+    distinctSubwayLines.saveAsTextFile(outputPath + SUBWAY_PROFILE_PATHS(DISTINCT_SUBWAY_LINES))
+
+    val countOfSubwayLines = getCountOfSubwayLines(subwayLines)
     countOfSubwayLines.saveAsTextFile(outputPath + SUBWAY_PROFILE_PATHS(SUBWAY_LINE))
   }
 

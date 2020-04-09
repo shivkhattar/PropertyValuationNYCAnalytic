@@ -38,6 +38,8 @@ object CommonConstants {
 
   final val SUBWAY_LINE = "SUBWAY_LINE"
 
+  final val DISTINCT_SUBWAY_LINES = "DISTINCT_SUBWAY_LINES"
+
   final val SUBWAY_LINE_SEPERATOR = "-"
 
   final val URL = "URL"
@@ -53,7 +55,7 @@ object CommonConstants {
   final val CRIME_PROFILE_PATHS = Map(CMPLNT_NUM -> "/count", DATE -> "/dates", OFFENSE_DESC -> "/offense_descs", LEVEL -> "/levels", BOROUGH -> "/boroughs",
     SUSPECT_AGE -> "/suspect_age", SUSPECT_RACE -> "/suspect_race", SUSPECT_SEX -> "/suspect_sex")
 
-  final val SUBWAY_PROFILE_PATHS = Map(OBJECT_ID -> "/count", SUBWAY_LINE -> "/countOfSubwayLines")
+  final val SUBWAY_PROFILE_PATHS = Map(OBJECT_ID -> "/count", SUBWAY_LINE -> "/countOfSubwayLines", STATION_NAME -> "/stationNameRange", DISTINCT_SUBWAY_LINES -> "/distinctSubwayLines")
 
   final val DISTINCT_SUBWAY_LINES_KEY = "Distinct Subway Lines"
   final val NAME_LENGTH_RANGE_KEY = "Name Length Range"
