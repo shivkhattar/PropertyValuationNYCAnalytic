@@ -18,6 +18,8 @@ object CommonConstants {
 
   val PROFILE_SUBWAY_PATH = "/output/profile/subway"
 
+  val PROFILE_PLUTO_PATH = "/output/profile/pluto"
+
   final val UNKNOWN = "UNKNOWN"
 
   final val SPLIT_REGEX = ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"
@@ -89,9 +91,13 @@ object CommonConstants {
 
   final val SUBWAY_PROFILE_PATHS = Map(OBJECT_ID -> "/count", SUBWAY_LINE -> "/countOfSubwayLines", STATION_NAME -> "/stationNameRange", DISTINCT_SUBWAY_LINES -> "/distinctSubwayLines")
 
+  final val PLUTO_PROFILE_PATHS = Map(BBL -> "/count", BOROUGH -> "/boroughs", ZIPCODE -> "/zipcodes", ADDRESS -> "/addressLengthRange")
+
   final val DISTINCT_SUBWAY_LINES_KEY = "Distinct Subway Lines"
 
   final val NAME_LENGTH_RANGE_KEY = "Name Length Range"
+
+  final val ADDRESS_LENGTH_RANGE_KEY = "Address Length Range"
 
   final val COUNT_KEY = "Count"
 }

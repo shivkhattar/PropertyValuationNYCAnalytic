@@ -15,10 +15,10 @@ object SubwayProfile extends Profile {
 
     CommonUtil.deleteFolderIfAlreadyExists(hdfs, outputPath)
 
-    val count = getTotalCount(data)
+    val count = CommonUtil.getTotalCount(data)
     count.saveAsTextFile(outputPath + SUBWAY_PROFILE_PATHS(OBJECT_ID))
 
-    val nameLengthRange = getNameLengthRange(data)
+    val nameLengthRange = CommonUtil.getLengthRange(data, STATION_NAME, NAME_LENGTH_RANGE_KEY)
     nameLengthRange.saveAsTextFile(outputPath + SUBWAY_PROFILE_PATHS(STATION_NAME))
 
     val subwayLines = data.flatMap(row => row(SUBWAY_LINE).split(SUBWAY_LINE_SEPERATOR))
@@ -41,18 +41,6 @@ object SubwayProfile extends Profile {
     subwayLines
       .distinct
       .map(d => (DISTINCT_SUBWAY_LINES_KEY, 1))
-      .reduceByKey(_ + _)
-      .map(tup => tup._1 + PROFILER_SEPARATOR + tup._2)
-  }
-
-  private def getNameLengthRange(data: RDD[Map[String, String]]) = {
-    data.map(row => (NAME_LENGTH_RANGE_KEY, (row(STATION_NAME).length, row(STATION_NAME).length)))
-      .reduceByKey((d1, d2) => (if (d1._1 < d2._1) d1._1 else d2._1, if (d1._2 > d2._2) d1._2 else d2._2))
-      .map(tup => tup._1 + PROFILER_SEPARATOR + tup._2.toString())
-  }
-
-  private def getTotalCount(data: RDD[Map[String, String]]) = {
-    data.map(d => (COUNT_KEY, 1))
       .reduceByKey(_ + _)
       .map(tup => tup._1 + PROFILER_SEPARATOR + tup._2)
   }

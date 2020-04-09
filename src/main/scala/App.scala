@@ -2,8 +2,8 @@ import clean.{CrimeClean, PlutoClean, SubwayClean}
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkConf
 import org.apache.hadoop.fs.FileSystem
-import profile.{CrimeProfile, SubwayProfile}
-import util.CommonConstants.{CLEANED_CRIME_PATH, CLEANED_PLUTO_PATH, CLEANED_SUBWAY_PATH, CRIME_PATH, FILE_SEPARATOR, PLUTO_PATH, PROFILE_CRIME_PATH, PROFILE_SUBWAY_PATH, SUBWAY_PATH}
+import profile.{CrimeProfile, PlutoProfile, SubwayProfile}
+import util.CommonConstants.{PROFILE_PLUTO_PATH, CLEANED_CRIME_PATH, CLEANED_PLUTO_PATH, CLEANED_SUBWAY_PATH, CRIME_PATH, FILE_SEPARATOR, PLUTO_PATH, PROFILE_CRIME_PATH, PROFILE_SUBWAY_PATH, SUBWAY_PATH}
 
 object App {
   def main(args: Array[String]): Unit = {
@@ -23,7 +23,7 @@ object App {
     var now = System.currentTimeMillis()
     val crimeInputPath = path + CRIME_PATH
     val crimeOutputPath = path + CLEANED_CRIME_PATH
-    CrimeClean.clean(sc, hdfs, crimeInputPath, crimeOutputPath)
+    //CrimeClean.clean(sc, hdfs, crimeInputPath, crimeOutputPath)
     println("Crime Cleaning took: " + (System.currentTimeMillis() - now) + " msecs")
 
     now = System.currentTimeMillis()
@@ -47,6 +47,11 @@ object App {
     val subwayProfileOutputPath = path + PROFILE_SUBWAY_PATH
     SubwayProfile.profile(sc, hdfs, subwayOutputPath, subwayProfileOutputPath)
     println("Subway Profiling took: " + (System.currentTimeMillis() - now) + " msecs")
+
+    now = System.currentTimeMillis()
+    val plutoProfileOutputPath = path + PROFILE_PLUTO_PATH
+    PlutoProfile.profile(sc, hdfs, plutoOutputPath, plutoProfileOutputPath)
+    println("Pluto Profiling took: " + (System.currentTimeMillis() - now) + " msecs")
 
     sc.stop()
     println("Total Application time: " + (System.currentTimeMillis() - start) + " msecs")
