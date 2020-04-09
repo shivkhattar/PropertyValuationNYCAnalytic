@@ -11,7 +11,7 @@ object App {
     val start = System.currentTimeMillis();
     val conf = new SparkConf().
       setMaster("local[5]").
-      setAppName("CleaningAndProfiling")
+      setAppName("PropertyValueAnalytic")
 
     val sc = new SparkContext(conf)
     sc.setLogLevel("ERROR")
