@@ -17,17 +17,17 @@ object App {
 
     val crimeInputPath = "data/crime.csv"
     val crimeOutputPath = "data/output/cleaned/crime"
-    //val cleanedCrime = CrimeClean.clean(sc, hdfs, crimeInputPath, crimeOutputPath)
+    //CrimeClean.clean(sc, hdfs, crimeInputPath, crimeOutputPath)
 
     val subwayInputPath = "data/subway.csv"
     val subwayOutputPath = "data/output/cleaned/subway"
-   // val cleanedSubway = SubwayClean.clean(sc, hdfs, subwayInputPath, subwayOutputPath)
+    SubwayClean.clean(sc, hdfs, subwayInputPath, subwayOutputPath)
 
     val crimeProfileOutputPath = "data/output/profile/crime"
-    CrimeProfile.profile(sc, hdfs, crimeOutputPath, crimeProfileOutputPath)
+    //CrimeProfile.profile(sc, hdfs, crimeOutputPath, crimeProfileOutputPath)
 
     val subwayProfileOutputPath = "data/output/profile/subway"
-    //SubwayProfile.profile(sc, hdfs, subwayOutputPath, subwayProfileOutputPath)
+    SubwayProfile.profile(sc, hdfs, subwayOutputPath, subwayProfileOutputPath)
     sc.stop()
     println("Cleaning and Profiling Done!")
   }

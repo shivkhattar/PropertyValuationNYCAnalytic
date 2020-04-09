@@ -3,7 +3,7 @@ package profile
 import org.apache.hadoop.fs.FileSystem
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
-import util.CommonConstants.{SPLIT_REGEX, BOROUGH, CMPLNT_NUM, DATE, LATITUDE, LEVEL, LONGITUDE, OFFENSE_DESC, SUSPECT_AGE, SUSPECT_RACE, SUSPECT_SEX, X_COORD, Y_COORD, CRIME_PROFILE_PATHS}
+import util.CommonConstants.{SPLIT_REGEX, BOROUGH, CMPLNT_NUM, DATE, LATITUDE, LEVEL, LONGITUDE, OFFENSE_DESC, SUSPECT_AGE, SUSPECT_RACE, SUSPECT_SEX, X_COORD, Y_COORD, CRIME_PROFILE_PATHS, PROFILER_SEPARATOR, COUNT_KEY}
 import util.CommonUtil
 
 object CrimeProfile extends Profile {
@@ -47,14 +47,14 @@ object CrimeProfile extends Profile {
       .map((_, 1))
       .reduceByKey(_ + _)
       .sortByKey()
-      .map(tup => tup._1 + " : " + tup._2.toString())
+      .map(tup => tup._1 + PROFILER_SEPARATOR + tup._2.toString())
     dates
   }
 
   private def getTotalCount(data: RDD[Map[String, String]]) = {
-    data.map(d => ("Count", 1))
+    data.map(d => (COUNT_KEY, 1))
       .reduceByKey(_ + _)
-      .map(tup => tup._1 + " : " + tup._2)
+      .map(tup => tup._1 + PROFILER_SEPARATOR + tup._2)
   }
 
   private def getCountsGroupedByKeyForField(data: RDD[Map[String, String]], field: String): RDD[String] = {
@@ -63,6 +63,6 @@ object CrimeProfile extends Profile {
       .map((_, 1))
       .reduceByKey(_ + _)
       .sortByKey()
-      .map(tup => tup._1 + " : " + tup._2.toString())
+      .map(tup => tup._1 + PROFILER_SEPARATOR + tup._2.toString())
   }
 }
