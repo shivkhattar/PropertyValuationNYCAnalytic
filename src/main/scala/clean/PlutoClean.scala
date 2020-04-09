@@ -20,7 +20,6 @@ object PlutoClean extends Clean {
         updateValueIfBlank(row(LOT)), updateValueIfBlank(row(ZIPCODE)), updateValueIfBlank(row(ADDRESS)), row(LATITUDE), row(LONGITUDE), row(X_COORD), row(Y_COORD)))
       .map(tup => tup.toString.substring(1, tup.toString.length - 1))
 
-    cleanedPluto.take(10).foreach(println)
     CommonUtil.deleteFolderIfAlreadyExists(hdfs, outputPath)
     cleanedPluto.saveAsTextFile(outputPath)
   }

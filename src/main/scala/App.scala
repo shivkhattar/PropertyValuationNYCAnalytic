@@ -36,7 +36,7 @@ object App {
     val plutoInputPath = path + PLUTO_PATH
     val plutoOutputPath = path + CLEANED_PLUTO_PATH
     PlutoClean.clean(sc, hdfs, plutoInputPath, plutoOutputPath)
-    println("Crime Cleaning took: " + (System.currentTimeMillis() - now) + " msecs")
+    println("Pluto Cleaning took: " + (System.currentTimeMillis() - now) + " msecs")
 
     now = System.currentTimeMillis()
     val crimeProfileOutputPath = path + PROFILE_CRIME_PATH
