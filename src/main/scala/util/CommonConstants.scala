@@ -4,11 +4,15 @@ object CommonConstants {
 
   val CRIME_PATH = "/crime.csv"
 
-  val CLEANED_CRIME_PATH = "/output/cleaned/crime"
-
   val SUBWAY_PATH = "/subway.csv"
 
+  val PLUTO_PATH = "/pluto.csv"
+
+  val CLEANED_CRIME_PATH = "/output/cleaned/crime"
+
   val CLEANED_SUBWAY_PATH = "/output/cleaned/subway"
+
+  val CLEANED_PLUTO_PATH = "/output/cleaned/pluto"
 
   val PROFILE_CRIME_PATH = "/output/profile/crime"
 
@@ -50,6 +54,18 @@ object CommonConstants {
 
   final val SUBWAY_LINE = "SUBWAY_LINE"
 
+  final val BLOCK = "BLOCK"
+
+  final val LOT = "LOT"
+
+  final val ZIPCODE = "ZIPCODE"
+
+  final val ADDRESS= "ADDRESS"
+
+  final val BOROCODE = "BOROCODE"
+
+  final val BBL = "BBL"
+
   final val DISTINCT_SUBWAY_LINES = "DISTINCT_SUBWAY_LINES"
 
   final val SUBWAY_LINE_SEPERATOR = "-"
@@ -65,6 +81,8 @@ object CommonConstants {
   final val PROFILER_SEPARATOR = " : "
 
   final val FILE_SEPARATOR = "/"
+
+  final val BOROUGH_MAP = Map("BX" -> "Bronx", "BK" -> "Brooklyn", "MN" -> "Manhattan", "QN" -> "Queens", "SI" -> "Staten Island")
 
   final val CRIME_PROFILE_PATHS = Map(CMPLNT_NUM -> "/count", DATE -> "/dates", OFFENSE_DESC -> "/offense_descs", LEVEL -> "/levels", BOROUGH -> "/boroughs",
     SUSPECT_AGE -> "/suspect_age", SUSPECT_RACE -> "/suspect_race", SUSPECT_SEX -> "/suspect_sex")
