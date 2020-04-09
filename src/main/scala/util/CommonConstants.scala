@@ -2,6 +2,18 @@ package util
 
 object CommonConstants {
 
+  val CRIME_PATH = "/crime.csv"
+
+  val CLEANED_CRIME_PATH = "/output/cleaned/crime"
+
+  val SUBWAY_PATH = "/subway.csv"
+
+  val CLEANED_SUBWAY_PATH = "/output/cleaned/subway"
+
+  val PROFILE_CRIME_PATH = "/output/profile/crime"
+
+  val PROFILE_SUBWAY_PATH = "/output/profile/subway"
+
   final val UNKNOWN = "UNKNOWN"
 
   final val SPLIT_REGEX = ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"
@@ -52,14 +64,16 @@ object CommonConstants {
 
   final val PROFILER_SEPARATOR = " : "
 
+  final val FILE_SEPARATOR = "/"
+
   final val CRIME_PROFILE_PATHS = Map(CMPLNT_NUM -> "/count", DATE -> "/dates", OFFENSE_DESC -> "/offense_descs", LEVEL -> "/levels", BOROUGH -> "/boroughs",
     SUSPECT_AGE -> "/suspect_age", SUSPECT_RACE -> "/suspect_race", SUSPECT_SEX -> "/suspect_sex")
 
   final val SUBWAY_PROFILE_PATHS = Map(OBJECT_ID -> "/count", SUBWAY_LINE -> "/countOfSubwayLines", STATION_NAME -> "/stationNameRange", DISTINCT_SUBWAY_LINES -> "/distinctSubwayLines")
 
   final val DISTINCT_SUBWAY_LINES_KEY = "Distinct Subway Lines"
+
   final val NAME_LENGTH_RANGE_KEY = "Name Length Range"
+
   final val COUNT_KEY = "Count"
-
-
 }

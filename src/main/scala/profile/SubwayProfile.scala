@@ -40,25 +40,19 @@ object SubwayProfile extends Profile {
   private def getDistinctSubwayLines(subwayLines: RDD[String]) = {
     subwayLines
       .distinct
-      .map(d => {
-        (DISTINCT_SUBWAY_LINES_KEY, 1)
-      })
+      .map(d => (DISTINCT_SUBWAY_LINES_KEY, 1))
       .reduceByKey(_ + _)
       .map(tup => tup._1 + PROFILER_SEPARATOR + tup._2)
   }
 
   private def getNameLengthRange(data: RDD[Map[String, String]]) = {
-    data.map(row => {
-      (NAME_LENGTH_RANGE_KEY, (row(STATION_NAME).length, row(STATION_NAME).length))
-    })
+    data.map(row => (NAME_LENGTH_RANGE_KEY, (row(STATION_NAME).length, row(STATION_NAME).length)))
       .reduceByKey((d1, d2) => (if (d1._1 < d2._1) d1._1 else d2._1, if (d1._2 > d2._2) d1._2 else d2._2))
       .map(tup => tup._1 + PROFILER_SEPARATOR + tup._2.toString())
   }
 
   private def getTotalCount(data: RDD[Map[String, String]]) = {
-    data.map(d => {
-      (COUNT_KEY, 1)
-    })
+    data.map(d => (COUNT_KEY, 1))
       .reduceByKey(_ + _)
       .map(tup => tup._1 + PROFILER_SEPARATOR + tup._2)
   }

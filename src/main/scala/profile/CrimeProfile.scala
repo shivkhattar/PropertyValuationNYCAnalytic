@@ -42,13 +42,12 @@ object CrimeProfile extends Profile {
   }
 
   private def getCountsGroupedByYear(data: RDD[Map[String, String]]) = {
-    val dates = data.map(row => row(DATE))
+    data.map(row => row(DATE))
       .map(x => x.trim.substring(6))
       .map((_, 1))
       .reduceByKey(_ + _)
       .sortByKey()
       .map(tup => tup._1 + PROFILER_SEPARATOR + tup._2.toString())
-    dates
   }
 
   private def getTotalCount(data: RDD[Map[String, String]]) = {
