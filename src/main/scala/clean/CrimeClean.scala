@@ -1,24 +1,32 @@
 package clean
 
-
 import org.apache.hadoop.fs.FileSystem
-import org.apache.hadoop.fs.Path
 import org.apache.spark.SparkContext
 import util.CommonUtil
+import util.CommonConstants.{SPLIT_REGEX, BOROUGH, CMPLNT_NUM, DATE, LATITUDE, LEVEL, LONGITUDE, OFFENSE_DESC, SUSPECT_AGE, SUSPECT_RACE, SUSPECT_SEX, X_COORD, Y_COORD, UNKNOWN}
 
 object CrimeClean extends Clean {
 
   def clean(sc: SparkContext, hdfs: FileSystem, inputPath: String, outputPath: String): Unit = {
-    val data = sc.textFile(inputPath).map(d => if (d.endsWith(",")) d.concat(CommonUtil.unknown) else d)
-    val rowsRemoved = data.map(_.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"))
-      .filter(_.length == 35)
-      .map(x => (x(0), x(6), x(8), x(12), x(13), x(15), x(16), x(27), x(28), x(21), x(22), x(23), x(24), x(25), x(32), x(33), x(34)))
+    val data = sc.textFile(inputPath).filter(!_.startsWith(CMPLNT_NUM)).map(d => if (d.endsWith(",")) d.concat(UNKNOWN) else d)
 
-    val cleanedCrime = rowsRemoved.filter(tup => !tup._1.isEmpty && !tup._2.isEmpty && !tup._8.isEmpty && !tup._9.isEmpty && !tup._10.isEmpty && !tup._11.isEmpty)
-      .map(tup => (tup._1, tup._2, CommonUtil.updateValueIfBlank(tup._3), CommonUtil.updateValueIfBlank(tup._4), CommonUtil.updateValueIfBlank(tup._5), CommonUtil.updateValueIfBlank(tup._6), CommonUtil.updateValueIfBlank(tup._7), tup._8, tup._9, tup._10, tup._11, CommonUtil.updateValueIfBlank(tup._12), CommonUtil.updateValueIfBlank(tup._13), CommonUtil.updateValueIfBlank(tup._14), CommonUtil.updateValueIfBlank(tup._15), CommonUtil.updateValueIfBlank(tup._16), CommonUtil.updateValueIfBlank(tup._17)))
+    val columnsRemoved = data.map(_.split(SPLIT_REGEX))
+      .filter(_.length == 35)
+      .map(x => Map(CMPLNT_NUM -> x(0), DATE -> x(6), OFFENSE_DESC -> x(8), LEVEL -> x(12), BOROUGH -> x(13),
+        LATITUDE -> x(27), LONGITUDE -> x(28), X_COORD -> x(21), Y_COORD -> x(22), SUSPECT_AGE -> x(23), SUSPECT_RACE -> x(24), SUSPECT_SEX -> x(25)))
+
+    val cleanedCrime = columnsRemoved.filter(row => !row(CMPLNT_NUM).isEmpty && !row(DATE).isEmpty && !row(LATITUDE).isEmpty && !row(LONGITUDE).isEmpty && !row(X_COORD).isEmpty && !row(Y_COORD).isEmpty)
+      .filter(row => row(DATE).trim.substring(6).toInt >= 2014)
+
+    val tupledCrime = cleanedCrime.map(row => (row(CMPLNT_NUM), row(DATE), CommonUtil.updateValueIfBlank(row(OFFENSE_DESC)), CommonUtil.updateValueIfBlank(row(LEVEL)), CommonUtil.updateValueIfBlank(row(BOROUGH)),
+      row(LATITUDE), row(LONGITUDE), row(X_COORD), row(Y_COORD), CommonUtil.updateValueIfBlank(getCleanedAgeRange(row(SUSPECT_AGE))), CommonUtil.updateValueIfBlank(row(SUSPECT_RACE)), CommonUtil.updateValueIfBlank(row(SUSPECT_SEX))))
       .map(tup => tup.toString.substring(1, tup.toString.length - 1))
 
     CommonUtil.deleteFolderIfAlreadyExists(hdfs, outputPath)
-    cleanedCrime.saveAsTextFile(outputPath)
+    tupledCrime.saveAsTextFile(outputPath)
+  }
+
+  def getCleanedAgeRange(age: String): String = {
+    if(Set("<18", "18-24", "25-44", "45-64", "65+").contains(age)) age else UNKNOWN
   }
 }

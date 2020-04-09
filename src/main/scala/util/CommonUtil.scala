@@ -1,13 +1,12 @@
 package util
 
 import org.apache.hadoop.fs.{FileSystem, Path}
+import util.CommonConstants.UNKNOWN
 
 object CommonUtil {
 
-  val unknown = "UNKNOWN"
-
   def updateValueIfBlank(value: String): String = {
-    if (isBlank(value)) unknown else value
+    if (isBlank(value)) UNKNOWN else value
   }
 
   def isBlank(value: String): Boolean = {

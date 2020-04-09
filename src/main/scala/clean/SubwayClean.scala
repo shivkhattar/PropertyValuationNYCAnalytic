@@ -7,7 +7,7 @@ import util.CommonUtil
 object SubwayClean extends Clean {
 
   def clean(sc: SparkContext, hdfs: FileSystem, inputPath: String, outputPath: String) = {
-    val data = sc.textFile(inputPath)
+    val data = sc.textFile(inputPath).filter(!_.startsWith("URL"))
     val rowsRemoved = data.map(_.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"))
       .filter(_.length == 6)
       .map(x => (x(1), x(2), x(3), x(4)))
