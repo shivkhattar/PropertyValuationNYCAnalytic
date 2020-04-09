@@ -1,43 +1,47 @@
 package profile
 
-import clean.SubwayClean.getSplitValue
 import org.apache.hadoop.fs.FileSystem
 import org.apache.spark.SparkContext
+import org.apache.spark.rdd.RDD
 import util.CommonUtil
+import util.CommonConstants.{SPLIT_REGEX, OBJECT_ID, SUBWAY_LINE, LATITUDE, LONGITUDE, STATION_NAME, PROFILER_SEPARATOR, SUBWAY_LINE_SEPERATOR, SUBWAY_PROFILE_PATHS, DISTINCT_SUBWAY_LINES_KEY, NAME_LENGTH_RANGE_KEY, COUNT_KEY, DISTINCT_SUBWAY_LINES}
 
 object SubwayProfile extends Profile {
 
   def profile(sc: SparkContext, hdfs: FileSystem, inputPath: String, outputPath: String): Unit = {
     val data = sc.textFile(inputPath)
-      .map(_.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"))
-      .map(x => (x(0), x(1), x(2), x(3), x(4)))
-
-    val count = data.map(d => ("Count", 1))
-      .reduceByKey(_ + _)
-      .map(tup => tup._1 + " : " + tup._2)
-
-    val length = data.map(d => ("Name Length Range", (d._2.length, d._2.length)))
-      .reduceByKey((d1, d2) => (if (d1._1 < d2._1) d1._1 else d2._1, if (d1._2 > d2._2) d1._2 else d2._2))
-      .map(tup => tup._1 + " : " + tup._2.toString())
-
-    val subwayLines = data.flatMap(d => d._5.split("-"))
-    val distinctSubwayLines = subwayLines
-      .distinct
-      .map(d => ("Distinct Subway Lines", 1))
-      .reduceByKey(_ + _)
-      .map(tup => tup._1 + " : " + tup._2)
-
-    val countOfSubwayLines = subwayLines.map((_, 1))
-      .reduceByKey(_ + _)
-      .sortByKey()
-      .map(tup => tup._1 + " : " + tup._2)
-
-    val combined = count.union(length).union(distinctSubwayLines)
+      .map(_.split(SPLIT_REGEX))
+      .map(x => Map(OBJECT_ID -> x(0), STATION_NAME -> x(1), LATITUDE -> x(2), LONGITUDE -> x(2), SUBWAY_LINE -> x(4)))
 
     CommonUtil.deleteFolderIfAlreadyExists(hdfs, outputPath)
 
-    combined.saveAsTextFile(outputPath)
+    val count = CommonUtil.getTotalCount(data)
+    count.saveAsTextFile(outputPath + SUBWAY_PROFILE_PATHS(OBJECT_ID))
 
-    countOfSubwayLines.saveAsTextFile(outputPath + "/countOfSubwayLines")
+    val nameLengthRange = CommonUtil.getLengthRange(data, STATION_NAME, NAME_LENGTH_RANGE_KEY)
+    nameLengthRange.saveAsTextFile(outputPath + SUBWAY_PROFILE_PATHS(STATION_NAME))
+
+    val subwayLines = data.flatMap(row => row(SUBWAY_LINE).split(SUBWAY_LINE_SEPERATOR))
+
+    val distinctSubwayLines = getDistinctSubwayLines(subwayLines)
+    distinctSubwayLines.saveAsTextFile(outputPath + SUBWAY_PROFILE_PATHS(DISTINCT_SUBWAY_LINES))
+
+    val countOfSubwayLines = getCountOfSubwayLines(subwayLines)
+    countOfSubwayLines.saveAsTextFile(outputPath + SUBWAY_PROFILE_PATHS(SUBWAY_LINE))
+  }
+
+  private def getCountOfSubwayLines(subwayLines: RDD[String]) = {
+    subwayLines.map((_, 1))
+      .reduceByKey(_ + _)
+      .sortByKey()
+      .map(tup => tup._1 + PROFILER_SEPARATOR + tup._2)
+  }
+
+  private def getDistinctSubwayLines(subwayLines: RDD[String]) = {
+    subwayLines
+      .distinct
+      .map(d => (DISTINCT_SUBWAY_LINES_KEY, 1))
+      .reduceByKey(_ + _)
+      .map(tup => tup._1 + PROFILER_SEPARATOR + tup._2)
   }
 }
