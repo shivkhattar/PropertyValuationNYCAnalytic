@@ -41,7 +41,7 @@ object CommonUtil {
 
   def writeOriginalCount(sc: SparkContext, originalInputPath: String, outputPath: String) = {
     val originalData = sc.textFile(originalInputPath).map(x => Map(LINE -> x));
-    val originalCount = CommonUtil.getTotalCount(originalData);
+    val originalCount = getTotalCount(originalData);
     originalCount.saveAsTextFile(outputPath + ORIGINAL_COUNT_PATH)
   }
 }
