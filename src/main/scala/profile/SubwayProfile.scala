@@ -4,16 +4,18 @@ import org.apache.hadoop.fs.FileSystem
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
 import util.CommonUtil
-import util.CommonConstants.{SPLIT_REGEX, OBJECT_ID, SUBWAY_LINE, LATITUDE, LONGITUDE, STATION_NAME, PROFILER_SEPARATOR, SUBWAY_LINE_SEPERATOR, SUBWAY_PROFILE_PATHS, DISTINCT_SUBWAY_LINES_KEY, NAME_LENGTH_RANGE_KEY, COUNT_KEY, DISTINCT_SUBWAY_LINES}
+import util.CommonConstants.{LINE, SPLIT_REGEX, OBJECT_ID, SUBWAY_LINE, LATITUDE, LONGITUDE, STATION_NAME, PROFILER_SEPARATOR, SUBWAY_LINE_SEPERATOR, SUBWAY_PROFILE_PATHS, DISTINCT_SUBWAY_LINES_KEY, NAME_LENGTH_RANGE_KEY, COUNT_KEY, DISTINCT_SUBWAY_LINES, ORIGINAL_COUNT_PATH}
 
 object SubwayProfile extends Profile {
 
-  def profile(sc: SparkContext, hdfs: FileSystem, inputPath: String, outputPath: String): Unit = {
-    val data = sc.textFile(inputPath)
+  def profile(sc: SparkContext, hdfs: FileSystem, originalInputPath: String, cleanedInputPath: String, outputPath: String): Unit = {
+    CommonUtil.deleteFolderIfAlreadyExists(hdfs, outputPath)
+
+    CommonUtil.writeOriginalCount(sc, originalInputPath, outputPath)
+
+    val data = sc.textFile(cleanedInputPath)
       .map(_.split(SPLIT_REGEX))
       .map(x => Map(OBJECT_ID -> x(0), STATION_NAME -> x(1), LATITUDE -> x(2), LONGITUDE -> x(2), SUBWAY_LINE -> x(4)))
-
-    CommonUtil.deleteFolderIfAlreadyExists(hdfs, outputPath)
 
     val count = CommonUtil.getTotalCount(data)
     count.saveAsTextFile(outputPath + SUBWAY_PROFILE_PATHS(OBJECT_ID))

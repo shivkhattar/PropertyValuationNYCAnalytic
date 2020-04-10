@@ -1,8 +1,9 @@
 package util
 
 import org.apache.hadoop.fs.{FileSystem, Path}
+import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
-import util.CommonConstants.{COUNT_KEY, UNKNOWN, PROFILER_SEPARATOR}
+import util.CommonConstants.{COUNT_KEY, LINE, PROFILER_SEPARATOR, UNKNOWN, ORIGINAL_COUNT_PATH}
 
 object CommonUtil {
 
@@ -32,9 +33,15 @@ object CommonUtil {
       .map(tup => tup._1 + PROFILER_SEPARATOR + tup._2.toString())
   }
 
-  def getLengthRange(data: RDD[Map[String, String]], field : String, key : String) = {
+  def getLengthRange(data: RDD[Map[String, String]], field: String, key: String) = {
     data.map(row => (key, (row(field).length, row(field).length)))
       .reduceByKey((d1, d2) => (if (d1._1 < d2._1) d1._1 else d2._1, if (d1._2 > d2._2) d1._2 else d2._2))
       .map(tup => tup._1 + PROFILER_SEPARATOR + tup._2.toString())
+  }
+
+  def writeOriginalCount(sc: SparkContext, originalInputPath: String, outputPath: String) = {
+    val originalData = sc.textFile(originalInputPath).map(x => Map(LINE -> x));
+    val originalCount = CommonUtil.getTotalCount(originalData);
+    originalCount.saveAsTextFile(outputPath + ORIGINAL_COUNT_PATH)
   }
 }
