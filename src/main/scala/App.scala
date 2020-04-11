@@ -40,17 +40,17 @@ object App {
 
     now = System.currentTimeMillis()
     val crimeProfileOutputPath = path + PROFILE_CRIME_PATH
-    CrimeProfile.profile(sc, hdfs, crimeOutputPath, crimeProfileOutputPath)
+    CrimeProfile.profile(sc, hdfs, crimeInputPath, crimeOutputPath, crimeProfileOutputPath)
     println("Crime Profiling took: " + (System.currentTimeMillis() - now) + " msecs")
 
     now = System.currentTimeMillis()
     val subwayProfileOutputPath = path + PROFILE_SUBWAY_PATH
-    SubwayProfile.profile(sc, hdfs, subwayOutputPath, subwayProfileOutputPath)
+    SubwayProfile.profile(sc, hdfs, subwayInputPath, subwayOutputPath, subwayProfileOutputPath)
     println("Subway Profiling took: " + (System.currentTimeMillis() - now) + " msecs")
 
     now = System.currentTimeMillis()
     val plutoProfileOutputPath = path + PROFILE_PLUTO_PATH
-    PlutoProfile.profile(sc, hdfs, plutoOutputPath, plutoProfileOutputPath)
+    PlutoProfile.profile(sc, hdfs, plutoInputPath, plutoOutputPath, plutoProfileOutputPath)
     println("Pluto Profiling took: " + (System.currentTimeMillis() - now) + " msecs")
 
     sc.stop()
@@ -68,5 +68,4 @@ object App {
   private def getInputPath(args: Array[String]) = {
     if (args(0).endsWith(FILE_SEPARATOR)) args(0).substring(0, args(0).length - 1) else args(0)
   }
-
 }

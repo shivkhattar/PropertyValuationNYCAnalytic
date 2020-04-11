@@ -9,13 +9,14 @@ import util.CommonUtil.getCountsGroupedByKeyForField
 
 object CrimeProfile extends Profile {
 
-  def profile(sc: SparkContext, hdfs: FileSystem, inputPath: String, outputPath: String): Unit = {
+  def profile(sc: SparkContext, hdfs: FileSystem, originalInputPath: String, inputPath: String, outputPath: String): Unit = {
+    CommonUtil.deleteFolderIfAlreadyExists(hdfs, outputPath)
+    CommonUtil.writeOriginalCount(sc, originalInputPath, outputPath)
+
     val data = sc.textFile(inputPath)
       .map(_.split(SPLIT_REGEX))
       .map(x => Map(CMPLNT_NUM -> x(0), DATE -> x(1), OFFENSE_DESC -> x(2), LEVEL -> x(3), BOROUGH -> x(4),
         LATITUDE -> x(5), LONGITUDE -> x(6), X_COORD -> x(7), Y_COORD -> x(8), SUSPECT_AGE -> x(9), SUSPECT_RACE -> x(10), SUSPECT_SEX -> x(11)))
-
-    CommonUtil.deleteFolderIfAlreadyExists(hdfs, outputPath)
 
     val count = CommonUtil.getTotalCount(data)
     count.saveAsTextFile(outputPath + CRIME_PROFILE_PATHS(CMPLNT_NUM))
