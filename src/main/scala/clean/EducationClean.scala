@@ -3,14 +3,13 @@ package clean
 import org.apache.hadoop.fs.FileSystem
 import org.apache.spark.SparkContext
 import util.CommonUtil
-import util.EdPropConstants.{SPLIT_REGEX, UNKNOWN, ED_ATS_SYSTEM_CODE, ED_LOCATION_NAME, ED_BBL, ED_GRADES_FINAL_TEXT, ED_OPEN_DATE, ED_LOCATION1
-  , ED_LAT_LONG_PREFIX, ED_LAT_LONG_SUFFIX, ED_LAT_LONG_SEPARATOR}
+import util.CommonConstants._
 
-object EducationCleanFinal extends Clean {
+object EducationClean extends Clean {
   def clean(sc: SparkContext, hdfs: FileSystem, inputPath: String, outputPath: String): Unit = {
 
     val data = sc.textFile(inputPath)
-      .filter(!_.startsWith("FISCAL_YEAR"))//.map(d => if (d.endsWith(",")) d.concat(UNKNOWN) else d)
+      .filter(!_.startsWith("FISCAL_YEAR"))
 
     val columnsRemoved = data.map(_.split(SPLIT_REGEX))
       .filter(_.length == 39)
@@ -18,18 +17,17 @@ object EducationCleanFinal extends Clean {
 
     val cleanedEducation = columnsRemoved.filter(row => !row(ED_ATS_SYSTEM_CODE).isEmpty && !row(ED_BBL).isEmpty && !row(ED_LOCATION1).isEmpty)
 
-    val tupledEdu = cleanedEducation.map(row => (row(ED_ATS_SYSTEM_CODE).trim, row(ED_BBL).trim, getLatLong(row(ED_LOCATION1).trim, true), getLatLong(row(ED_LOCATION1),false).trim
+    val tupledEdu = cleanedEducation.map(row => (row(ED_ATS_SYSTEM_CODE).trim, row(ED_BBL).trim, getLatLong(row(ED_LOCATION1).trim, true), getLatLong(row(ED_LOCATION1), false).trim
       , getZipCode(row(ED_LOCATION1)).trim, row(ED_LOCATION_NAME).trim, row(ED_GRADES_FINAL_TEXT).trim, row(ED_OPEN_DATE).trim))
       .map(tup => tup.toString.substring(1, tup.toString.length - 1))
 
     CommonUtil.deleteFolderIfAlreadyExists(hdfs, outputPath)
-    //tupledEdu.take(5).foreach(println)
     tupledEdu.saveAsTextFile(outputPath)
   }
 
   def getLatLong(addressString: String, isLatitude: Boolean): String = {
     val substr = addressString.substring(addressString.indexOf("NY 1"))
-    val split = substr.substring(substr.indexOf(ED_LAT_LONG_PREFIX) + 1 ).replace(ED_LAT_LONG_SUFFIX, "")
+    val split = substr.substring(substr.indexOf(ED_LAT_LONG_PREFIX) + 1).replace(ED_LAT_LONG_SUFFIX, "")
     if (isLatitude) split.substring(0, split.indexOf(ED_LAT_LONG_SEPARATOR)).replace(ED_LAT_LONG_SEPARATOR, "")
     else split.substring(split.indexOf(ED_LAT_LONG_SEPARATOR) + 1)
   }
