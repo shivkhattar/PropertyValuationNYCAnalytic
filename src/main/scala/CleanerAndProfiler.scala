@@ -13,23 +13,23 @@ object CleanerAndProfiler {
 
     val crimeInputPath = path + CRIME_PATH
     val crimeOutputPath = path + CLEANED_CRIME_PATH
-    CrimeClean.clean(sc, hdfs, crimeInputPath, crimeOutputPath)
+    //CrimeClean.clean(sc, hdfs, crimeInputPath, crimeOutputPath)
     println("Crime Cleaning took: " + (System.currentTimeMillis() - now) + " msecs")
 
     now = System.currentTimeMillis()
     val crimeProfileOutputPath = path + PROFILE_CRIME_PATH
-    CrimeProfile.profile(sc, hdfs, crimeInputPath, crimeOutputPath, crimeProfileOutputPath)
+    //CrimeProfile.profile(sc, hdfs, crimeInputPath, crimeOutputPath, crimeProfileOutputPath)
     println("Crime Profiling took: " + (System.currentTimeMillis() - now) + " msecs")
 
     now = System.currentTimeMillis()
     val subwayInputPath = path + SUBWAY_PATH
     val subwayOutputPath = path + CLEANED_SUBWAY_PATH
-    SubwayClean.clean(sc, hdfs, subwayInputPath, subwayOutputPath)
+    //SubwayClean.clean(sc, hdfs, subwayInputPath, subwayOutputPath)
     println("Subway Cleaning took: " + (System.currentTimeMillis() - now) + " msecs")
 
     now = System.currentTimeMillis()
     val subwayProfileOutputPath = path + PROFILE_SUBWAY_PATH
-    SubwayProfile.profile(sc, hdfs, subwayInputPath, subwayOutputPath, subwayProfileOutputPath)
+    //SubwayProfile.profile(sc, hdfs, subwayInputPath, subwayOutputPath, subwayProfileOutputPath)
     println("Subway Profiling took: " + (System.currentTimeMillis() - now) + " msecs")
 
     now = System.currentTimeMillis()
@@ -46,23 +46,23 @@ object CleanerAndProfiler {
     now = System.currentTimeMillis()
     val educationInputPath = path + EDUCATION_PATH
     val educationOutputPath = path + CLEANED_EDUCATION_PATH
-    EducationClean.clean(sc, hdfs, educationInputPath, educationOutputPath)
+    //EducationClean.clean(sc, hdfs, educationInputPath, educationOutputPath)
     println("Education Cleaning took: " + (System.currentTimeMillis() - now) + " msecs")
 
     now = System.currentTimeMillis()
     val educationProfileOutputPath = path + PROFILED_EDUCATION_PATH
-    EducationProfile.profile(sc, hdfs, educationInputPath, educationOutputPath, educationProfileOutputPath)
+    //EducationProfile.profile(sc, hdfs, educationInputPath, educationOutputPath, educationProfileOutputPath)
     println("Education Profiling took: " + (System.currentTimeMillis() - now) + " msecs")
     
     now = System.currentTimeMillis()
     val propertyInputPath = path + PROPERTY_PATH
     val propertyOutputPath = path + CLEANED_PROPERTY_PATH
-    PropertyClean.clean(sc, hdfs, propertyInputPath, propertyOutputPath)
+    //PropertyClean.clean(sc, hdfs, propertyInputPath, propertyOutputPath)
     println("Property Cleaning took: " + (System.currentTimeMillis() - now) + " msecs")
 
     now = System.currentTimeMillis()
     val propertyProfileOutputPath = path + PROFILED_PROPERTY_PATH
-    PropertyProfile.profile(sc, hdfs, propertyInputPath, propertyOutputPath, propertyProfileOutputPath)
+    //PropertyProfile.profile(sc, hdfs, propertyInputPath, propertyOutputPath, propertyProfileOutputPath)
     println("Property Profiling took: " + (System.currentTimeMillis() - now) + " msecs")
 
     sc.stop()
