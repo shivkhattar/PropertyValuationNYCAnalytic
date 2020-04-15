@@ -2,11 +2,8 @@ package profile
 
 import org.apache.hadoop.fs.FileSystem
 import org.apache.spark.SparkContext
-import util.CommonUtil
-import util.CommonUtil.getCountsGroupedByKeyForField
+import util.CommonConstants._
 import org.apache.spark.rdd.RDD
-import util.EdPropConstants.{ED_ATS_SYSTEM_CODE, ED_LOCATION_NAME, ED_BBL, ED_GRADES_FINAL_TEXT, ED_OPEN_DATE, ED_LOCATION1
-  , ED_LAT_LONG_PREFIX, ED_LAT_LONG_SUFFIX, ED_LAT_LONG_SEPARATOR, ED_LATITUDE, ED_LONGITUDE, ED_ZIP_CODE, SPLIT_REGEX, ED_PROFILE_PATHS, PROFILER_SEPARATOR}
 import util.CommonUtil
 import util.CommonUtil.getCountsGroupedByKeyForField
 

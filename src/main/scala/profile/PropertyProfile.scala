@@ -3,10 +3,9 @@ package profile
 import org.apache.hadoop.fs.FileSystem
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
-import util.EdPropConstants.{SPLIT_REGEX, UNKNOWN, PROP_BORO, PROP_BLOCK, PROP_LOT, PROP_EASEMENT, PROP_PARID, PROP_CURMKTTOT
-  , PROP_ZIPCODE, PROP_YRBUILT, PROP_BLDG_CLASS, PROP_ZONING, PROP_PROFILE_PATHS, PROFILER_SEPARATOR, PROP_MAX, PROP_MIN}
 import util.CommonUtil
 import util.CommonUtil.getCountsGroupedByKeyForField
+import util.CommonConstants._
 
 object PropertyProfile extends Profile {
 
@@ -37,8 +36,6 @@ object PropertyProfile extends Profile {
     val min = (getMinPropertyVal(data))
     val max_min = sc.parallelize(Seq(max.toString + " " + min.toString))
     max_min.saveAsTextFile(outputPath + PROP_PROFILE_PATHS(PROP_MAX))
-    //min.saveAsTextFile(outputPath + PROP_PROFILE_PATHS(PROP_MIN))
-
   }
 
   private def getCountsGroupedByYearBuilt(data: RDD[Map[String, String]]) = {
