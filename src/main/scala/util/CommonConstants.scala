@@ -2,11 +2,11 @@ package util
 
 object CommonConstants {
 
-  final val CRIME_PATH = "/data/crime.csv"
+  final val CRIME_PATH = "/crime.csv"
 
-  final val SUBWAY_PATH = "/data/subway.csv"
+  final val SUBWAY_PATH = "/subway.csv"
 
-  final val PLUTO_PATH = "/data/pluto.csv"
+  final val PLUTO_PATH = "/pluto.csv"
 
   final val CLEANED_CRIME_PATH = "/output/cleaned/crime"
 
@@ -19,6 +19,8 @@ object CommonConstants {
   final val PROFILE_SUBWAY_PATH = "/output/profiled/subway"
 
   final val PROFILE_PLUTO_PATH = "/output/profiled/pluto"
+
+  final val LATLONG_PLUTO_PATH = "/output/latlong/pluto"
 
   final val UNKNOWN = "UNKNOWN"
 
@@ -66,6 +68,8 @@ object CommonConstants {
 
   final val BOROCODE = "BOROCODE"
 
+  final val BOROBLOCK = "BOROBLOCK"
+
   final val BBL = "BBL"
 
   final val LINE = "LINE"
@@ -105,9 +109,9 @@ object CommonConstants {
 
   final val COUNT_KEY = "Count"
 
-  final val EDUCATION_PATH = "/data/education.csv"
+  final val EDUCATION_PATH = "/education.csv"
 
-  final val PROPERTY_PATH = "/data/property.csv"
+  final val PROPERTY_PATH = "/property.csv"
 
   final val CLEANED_EDUCATION_PATH = "/output/cleaned/education"
 
