@@ -56,6 +56,8 @@ object CommonConstants {
 
   final val SUBWAY_LINE = "SUBWAY_LINE"
 
+  final val DEFAULT_LEVEL = "1"
+
   final val BLOCK = "BLOCK"
 
   final val LOT = "LOT"

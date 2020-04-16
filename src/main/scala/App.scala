@@ -19,7 +19,7 @@ object App {
 
     val hdfs = FileSystem.get(sc.hadoopConfiguration)
 
-    //Cleaner.clean(sc, hdfs, inputPath)
+   // Cleaner.clean(sc, hdfs, inputPath)
     //Profiler.profile(sc, hdfs, inputPath)
     Processor.preprocess(sc, hdfs, inputPath)
     sc.stop()
