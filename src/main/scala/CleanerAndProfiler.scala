@@ -1,8 +1,9 @@
 import clean.{CrimeClean, EducationClean, PlutoClean, PropertyClean, SubwayClean}
+import process.{NormalizeLatLong}
 import org.apache.hadoop.fs.FileSystem
 import org.apache.spark.SparkContext
 import profile.{CrimeProfile, EducationProfile, PlutoProfile, PropertyProfile, SubwayProfile}
-import util.CommonConstants.{LATLONG_PLUTO_PATH, PROPERTY_PATH, CLEANED_PROPERTY_PATH, PROFILED_PROPERTY_PATH, EDUCATION_PATH, CLEANED_EDUCATION_PATH, PROFILED_EDUCATION_PATH, CLEANED_CRIME_PATH, CLEANED_PLUTO_PATH, CLEANED_SUBWAY_PATH, CRIME_PATH, FILE_SEPARATOR, PLUTO_PATH, PROFILE_CRIME_PATH, PROFILE_PLUTO_PATH, PROFILE_SUBWAY_PATH, SUBWAY_PATH}
+import util.CommonConstants.{PROPERTY_PATH, CLEANED_PROPERTY_PATH, PROFILED_PROPERTY_PATH, EDUCATION_PATH, CLEANED_EDUCATION_PATH, PROFILED_EDUCATION_PATH, CLEANED_CRIME_PATH, CLEANED_PLUTO_PATH, CLEANED_SUBWAY_PATH, CRIME_PATH, FILE_SEPARATOR, PLUTO_PATH, PROFILE_CRIME_PATH, PROFILE_PLUTO_PATH, PROFILE_SUBWAY_PATH, SUBWAY_PATH}
 
 object CleanerAndProfiler {
 
@@ -44,8 +45,7 @@ object CleanerAndProfiler {
     println("Pluto Profiling took: " + (System.currentTimeMillis() - now) + " msecs")
 
     now = System.currentTimeMillis()
-    //val plutoLatLongOutput = path + LATLONG_PLUTO_PATH
-    //PlutoLatLong.getLatLong(sc, hdfs, plutoOutputPath)
+    NormalizeLatLong.normalizeLatLongFromRDD(sc, hdfs, plutoOutputPath)
     println("Pluto analysis took: " + (System.currentTimeMillis() - now) + " msecs")
 
     now = System.currentTimeMillis()
