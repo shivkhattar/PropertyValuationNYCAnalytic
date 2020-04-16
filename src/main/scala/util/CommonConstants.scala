@@ -177,7 +177,7 @@ object CommonConstants {
 
   final val RADIUS_OF_EARTH_IN_KM: Double = 6371
 
-  final val ZERO_SCORE: Double = 0
-
   final val RANGE_IN_KM : Double = 1
+  
+  final val ZERO_SCORE: Double = 0
 }
