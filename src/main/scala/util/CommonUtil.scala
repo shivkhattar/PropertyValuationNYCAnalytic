@@ -4,6 +4,7 @@ import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
 import util.CommonConstants.{COUNT_KEY, LINE, ORIGINAL_COUNT_PATH, PROFILER_SEPARATOR, SPLIT_REGEX, UNKNOWN}
+import util.CommonConstants.{COUNT_KEY, LINE, PROFILER_SEPARATOR, UNKNOWN, ORIGINAL_COUNT_PATH, RADIUS_OF_EARTH_IN_KM}
 
 object CommonUtil {
 
@@ -45,29 +46,18 @@ object CommonUtil {
     originalCount.saveAsTextFile(outputPath + ORIGINAL_COUNT_PATH)
   }
 
-  def getAvgLatLong(inputRDD: RDD[(String, Iterable[String])]) : RDD[(String, String)] = {
-    val outputRDD = inputRDD.map(line => (line._1, line._2.to[collection.immutable.Seq].toList))
-      .map(tup => (tup._1, getAvgFromList(tup._2)))
-    return outputRDD
-  }
+  def inRange(distance: Double): Boolean = distance < 100
 
-  def getAvgFromList(inputList: List[String]): String ={
-    var x : Double = 0.0
-    var y : Double = 0.0
-    var z : Double = 0.0
-    for(s <- inputList) {
-      val a = s.split(SPLIT_REGEX)
-      val lat = a(1).toDouble
-      val lon = a(2).toDouble
-      x = x + math.cos(lat) * math.cos(lon)
-      y = y + math.cos(lat) * math.sin(lon)
-      z = z + math.sin(lat)
-    }
-    val length : Double = inputList.size.toDouble
-    x = x / length
-    y = y / length
-    z = z / length
-    val latLong : String = math.atan2(z, math.sqrt(x * x + y * y)).toString + ", " + math.atan2(y, x).toString
-    return latLong
+  def inRange(location1: (String, String), location2: (String, String)): Boolean = calculateDistance(location1, location2) < 10
+
+
+  // location = (latitude, longitude)
+  def calculateDistance(location1: (String, String), location2: (String, String)): Double = {
+    val location1InRadians = (location1._1.toDouble.toRadians, location1._2.toDouble.toRadians)
+    val location2InRadians = (location2._1.toDouble.toRadians, location2._2.toDouble.toRadians)
+    val difference = (location2InRadians._1 - location1InRadians._1, location2InRadians._2 - location1InRadians._2)
+    val result = RADIUS_OF_EARTH_IN_KM * 2 * math.asin(math.sqrt(math.pow(math.sin(difference._1 / 2), 2)
+      + math.cos(location1InRadians._1) * math.cos(location2InRadians._1) * math.pow(math.sin(difference._2 / 2), 2)))
+    result
   }
 }
