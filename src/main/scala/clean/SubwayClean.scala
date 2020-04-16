@@ -14,7 +14,7 @@ object SubwayClean extends Clean {
       .map(x => Map(OBJECT_ID -> x(1), STATION_NAME -> x(2), LAT_LONG -> x(3), SUBWAY_LINE -> x(4)))
 
     val cleanedSubway = rowsRemoved.filter(row => !row(OBJECT_ID).isEmpty && !row(STATION_NAME).isEmpty && !row(LAT_LONG).isEmpty)
-      .map(row => (row(OBJECT_ID), row(STATION_NAME), getSplitValue(row(LAT_LONG), true), getSplitValue(row(LAT_LONG), false), updateValueIfBlank(row(SUBWAY_LINE))))
+      .map(row => (row(OBJECT_ID), row(STATION_NAME), getSplitValue(row(LAT_LONG), false), getSplitValue(row(LAT_LONG), true), updateValueIfBlank(row(SUBWAY_LINE))))
       .map(tup => tup.toString.substring(1, tup.toString.length - 1))
 
     deleteFolderIfAlreadyExists(hdfs, outputPath)

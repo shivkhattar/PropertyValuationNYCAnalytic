@@ -176,4 +176,6 @@ object CommonConstants {
     , ED_BBL -> "/bbl")
 
   final val RADIUS_OF_EARTH_IN_KM: Double = 6371
+
+  final val ZERO_SCORE: Double = 0
 }

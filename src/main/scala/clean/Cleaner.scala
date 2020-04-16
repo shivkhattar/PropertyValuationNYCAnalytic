@@ -16,13 +16,13 @@ object Cleaner {
     now = System.currentTimeMillis()
     val subwayInputPath = path + SUBWAY_PATH
     val subwayOutputPath = path + CLEANED_SUBWAY_PATH
-    //SubwayClean.clean(sc, hdfs, subwayInputPath, subwayOutputPath)
+    SubwayClean.clean(sc, hdfs, subwayInputPath, subwayOutputPath)
     println("Subway Cleaning took: " + (System.currentTimeMillis() - now) + " msecs")
 
     now = System.currentTimeMillis()
     val plutoInputPath = path + PLUTO_PATH
     val plutoOutputPath = path + CLEANED_PLUTO_PATH
-    PlutoClean.clean(sc, hdfs, plutoInputPath, plutoOutputPath)
+    //PlutoClean.clean(sc, hdfs, plutoInputPath, plutoOutputPath)
     println("Pluto Cleaning took: " + (System.currentTimeMillis() - now) + " msecs")
 
     now = System.currentTimeMillis()

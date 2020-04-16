@@ -46,7 +46,7 @@ object CommonUtil {
     originalCount.saveAsTextFile(outputPath + ORIGINAL_COUNT_PATH)
   }
 
-  def inRange(distance: Double): Boolean = distance < 100
+  def inRange(distance: Double): Boolean = distance < 1
 
   def inRange(location1: (String, String), location2: (String, String)): Boolean = calculateDistance(location1, location2) < 10
 
