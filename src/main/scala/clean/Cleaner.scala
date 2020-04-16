@@ -16,7 +16,7 @@ object Cleaner {
     now = System.currentTimeMillis()
     val subwayInputPath = path + SUBWAY_PATH
     val subwayOutputPath = path + CLEANED_SUBWAY_PATH
-    SubwayClean.clean(sc, hdfs, subwayInputPath, subwayOutputPath)
+    //SubwayClean.clean(sc, hdfs, subwayInputPath, subwayOutputPath)
     println("Subway Cleaning took: " + (System.currentTimeMillis() - now) + " msecs")
 
     now = System.currentTimeMillis()
@@ -34,7 +34,7 @@ object Cleaner {
     now = System.currentTimeMillis()
     val propertyInputPath = path + PROPERTY_PATH
     val propertyOutputPath = path + CLEANED_PROPERTY_PATH
-    // PropertyClean.clean(sc, hdfs, propertyInputPath, propertyOutputPath)
+    //PropertyClean.clean(sc, hdfs, propertyInputPath, propertyOutputPath)
     println("Property Cleaning took: " + (System.currentTimeMillis() - now) + " msecs")
 
     println("Cleaning Done!")
