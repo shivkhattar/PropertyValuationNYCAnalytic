@@ -19,9 +19,9 @@ object EducationProcess {
       .minBy(_._2))
       .map(x => (x._1, if (CommonUtil.inRange(x._2)) x._3 else ZERO_SCORE)).reduceByKey(_ + _).map(x => (x._1, x._2.toDouble / totalEducationScore))
 
-    println(processedPlutoData.length)
+    //println(processedPlutoData.length)
     val pluto = sc.parallelize(processedPlutoData).map(y => (y(BOROUGH_BLOCK), None))
-    val ansRDD = educationScoreRDD.fullOuterJoin(pluto).mapValues(option => if (option._1.isEmpty) ZERO_SCORE else option._1.get).filter(row => row._2 > 0.0 ).count
+    //val ansRDD = educationScoreRDD.fullOuterJoin(pluto).mapValues(option => if (option._1.isEmpty) ZERO_SCORE else option._1.get).filter(row => row._2 > 0.0 ).count
 
     educationScoreRDD.fullOuterJoin(pluto).mapValues(option => if (option._1.isEmpty) ZERO_SCORE else option._1.get)
   }
