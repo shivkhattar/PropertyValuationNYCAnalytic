@@ -20,8 +20,6 @@ object CommonConstants {
 
   final val PROFILE_PLUTO_PATH = "/output/profiled/pluto"
 
-  final val LATLONG_PLUTO_PATH = "/output/latlong/pluto"
-
   final val UNKNOWN = "UNKNOWN"
 
   final val SPLIT_REGEX = ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"

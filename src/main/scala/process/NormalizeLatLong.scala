@@ -1,4 +1,4 @@
-package Analysis
+package process
 
 import util.CommonUtil
 import org.apache.hadoop.fs.FileSystem
@@ -8,8 +8,8 @@ import util.CommonConstants.{BOROBLOCK, ADDRESS, BBL, BLOCK, BOROCODE, BOROUGH, 
 import util.CommonUtil.updateValueIfBlank
 
 object NormalizeLatLong {
-  def normalizeLatLongFromRDD(sc: SparkContext, hdfs: FileSystem, plutoOutputPath: String): Unit = {
-    val inputRDD = sc.textFile(plutoOutputPath).map(_.split(SPLIT_REGEX))
+  def normalizeLatLongFromRDD(sc: SparkContext, hdfs: FileSystem, cleanedPlutoFilesPath: String): Unit = {
+    val inputRDD = sc.textFile(cleanedPlutoFilesPath).map(_.split(SPLIT_REGEX))
       .map(x => (x(1).toString + " " + x(3).toString, x(5).toString + ", " + x(7).toString + ", " + x(8).toString))
       .groupByKey()
     val latLongPlutoData = CommonUtil.getAvgLatLong(inputRDD)
