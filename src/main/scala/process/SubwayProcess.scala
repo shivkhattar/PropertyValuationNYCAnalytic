@@ -8,7 +8,7 @@ import util.CommonUtil
 
 object SubwayProcess {
 
-  def processSubway(sc: SparkContext, hdfs: FileSystem, cleanedSubwayPath: String, processedPlutoData: List[Map[String, String]], outputPath: String): RDD[(String, Double)] = {
+  def processSubway(sc: SparkContext, hdfs: FileSystem, cleanedSubwayPath: String, processedPlutoData: List[Map[String, String]]): RDD[(String, Double)] = {
 
     val subwayData = sc.textFile(cleanedSubwayPath).map(_.split(SPLIT_REGEX))
       .map(x => Map(OBJECT_ID -> x(0), LATITUDE -> x(2), LONGITUDE -> x(3)))
