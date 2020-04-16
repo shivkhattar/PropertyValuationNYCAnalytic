@@ -18,7 +18,7 @@ object SubwayProcess {
     val subwayScoreRDD = subwayData.map(row => processedPlutoData
       .map(y => (y(BOROUGH_BLOCK), CommonUtil.calculateDistance((row(LATITUDE), row(LONGITUDE)), (y(LATITUDE), y(LONGITUDE))), 1))
       .minBy(_._2))
-      .map(x => (x._1, if (CommonUtil.inRange(x._2)) x._3 else 0)).reduceByKey(_ + _).map(x => (x._1, x._2.toDouble / totalSubwayScore))
+      .map(x => (x._1, if (CommonUtil.inRange(x._2)) x._3 else ZERO_SCORE)).reduceByKey(_ + _).map(x => (x._1, x._2.toDouble / totalSubwayScore))
 
     val pluto = sc.parallelize(processedPlutoData).map(y => (y(BOROUGH_BLOCK), None))
 
