@@ -12,7 +12,7 @@ object PlutoClean extends Clean {
     val data = sc.textFile(inputPath).filter(!_.startsWith(BOROUGH.toLowerCase))
 
     val columnsRemoved = data.map(_.split(SPLIT_REGEX))
-      .map(x => Map(BOROCODE -> x(67), BOROUGH -> x(0), BLOCK -> x(6), LOT -> x(2), BBL -> x(68), ZIPCODE -> x(8), ADDRESS -> x(14),
+      .map(x => Map(BOROCODE -> x(67), BOROUGH -> x(0), BLOCK -> x(1), LOT -> x(2), BBL -> x(68), ZIPCODE -> x(8), ADDRESS -> x(14),
         X_COORD -> x(71), Y_COORD -> x(72), LATITUDE -> x(73), LONGITUDE -> x(74)))
 
     val cleanedPluto = columnsRemoved.filter(row => !row(LATITUDE).isEmpty && !row(LONGITUDE).isEmpty)

@@ -52,7 +52,7 @@ object CommonConstants {
 
   final val STATION_NAME = "STATION_NAME"
 
-  final val LAT_LONG= "LATLONG"
+  final val LAT_LONG = "LATLONG"
 
   final val SUBWAY_LINE = "SUBWAY_LINE"
 
@@ -62,7 +62,9 @@ object CommonConstants {
 
   final val ZIPCODE = "ZIPCODE"
 
-  final val ADDRESS= "ADDRESS"
+  final val ADDRESS = "ADDRESS"
+
+  final val BOROUGH_BLOCK = "BOROUGH_BLOCK"
 
   final val BOROCODE = "BOROCODE"
 
@@ -168,8 +170,10 @@ object CommonConstants {
   final val PROP_MIN = "min"
 
   final val PROP_PROFILE_PATHS = Map(PROP_PARID -> "/parid", PROP_ZIPCODE -> "/zipcode", PROP_CURMKTTOT -> "/current_mkt_value", PROP_BORO -> "/borough",
-    PROP_BLOCK -> "/block", PROP_LOT -> "/lot", PROP_ZONING -> "/zone" ,PROP_YRBUILT -> "/year_built", PROP_MAX -> "/max", PROP_MIN -> "/min")
+    PROP_BLOCK -> "/block", PROP_LOT -> "/lot", PROP_ZONING -> "/zone", PROP_YRBUILT -> "/year_built", PROP_MAX -> "/max", PROP_MIN -> "/min")
 
   final val ED_PROFILE_PATHS = Map(ED_ATS_SYSTEM_CODE -> "/ats_code", ED_ZIP_CODE -> "/zip_code", ED_OPEN_DATE -> "/open_year", ED_GRADES_FINAL_TEXT -> "/grades_taught"
-    ,ED_BBL -> "/bbl")
+    , ED_BBL -> "/bbl")
+
+  final val RADIUS_OF_EARTH_IN_KM: Double = 6371
 }
