@@ -3,8 +3,7 @@ package util
 import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
-import util.CommonConstants.{COUNT_KEY, LINE, ORIGINAL_COUNT_PATH, PROFILER_SEPARATOR, SPLIT_REGEX, UNKNOWN}
-import util.CommonConstants.{COUNT_KEY, LINE, PROFILER_SEPARATOR, UNKNOWN, ORIGINAL_COUNT_PATH, RADIUS_OF_EARTH_IN_KM}
+import util.CommonConstants.{COUNT_KEY, LINE, PROFILER_SEPARATOR, UNKNOWN, ORIGINAL_COUNT_PATH, RADIUS_OF_EARTH_IN_KM, RANGE_IN_KM}
 
 object CommonUtil {
 
@@ -46,10 +45,7 @@ object CommonUtil {
     originalCount.saveAsTextFile(outputPath + ORIGINAL_COUNT_PATH)
   }
 
-  def inRange(distance: Double): Boolean = distance < 100
-
-  def inRange(location1: (String, String), location2: (String, String)): Boolean = calculateDistance(location1, location2) < 10
-
+  def inRange(distance: Double): Boolean = distance < RANGE_IN_KM
 
   // location = (latitude, longitude)
   def calculateDistance(location1: (String, String), location2: (String, String)): Double = {

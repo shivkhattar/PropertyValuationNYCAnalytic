@@ -24,19 +24,16 @@ object PlutoProcess {
     var y: Double = 0.0
     var z: Double = 0.0
     for (s <- inputList) {
-      val lat = s._1.toDouble
-      val lon = s._2.toDouble
+      val lat = s._1.toDouble.toRadians
+      val lon = s._2.toDouble.toRadians
       x = x + math.cos(lat) * math.cos(lon)
       y = y + math.cos(lat) * math.sin(lon)
       z = z + math.sin(lat)
     }
-    val length: Double = inputList.size.toDouble
+    val length: Double = inputList.length.toDouble
     x = x / length
     y = y / length
     z = z / length
-    val a = (math.atan2(z, math.sqrt(x * x + y * y)).toString, math.atan2(y, x).toString)
-    println(a)
-    a
-
+    (math.atan2(z, math.sqrt(x * x + y * y)).toDegrees.toString, math.atan2(y, x).toDegrees.toString)
   }
 }
