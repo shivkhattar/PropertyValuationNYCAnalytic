@@ -14,11 +14,13 @@ object CommonConstants {
 
   final val CLEANED_PLUTO_PATH = "/output/cleaned/pluto"
 
-  final val PROFILE_CRIME_PATH = "/output/profile/crime"
+  final val PROFILE_CRIME_PATH = "/output/profiled/crime"
 
-  final val PROFILE_SUBWAY_PATH = "/output/profile/subway"
+  final val PROFILE_SUBWAY_PATH = "/output/profiled/subway"
 
-  final val PROFILE_PLUTO_PATH = "/output/profile/pluto"
+  final val PROFILE_PLUTO_PATH = "/output/profiled/pluto"
+
+  final val LATLONG_PLUTO_PATH = "/output/latlong/pluto"
 
   final val UNKNOWN = "UNKNOWN"
 
@@ -66,6 +68,8 @@ object CommonConstants {
 
   final val BOROCODE = "BOROCODE"
 
+  final val BOROBLOCK = "BOROBLOCK"
+
   final val BBL = "BBL"
 
   final val LINE = "LINE"
@@ -88,7 +92,7 @@ object CommonConstants {
 
   final val BOROUGH_MAP = Map("BX" -> "Bronx", "BK" -> "Brooklyn", "MN" -> "Manhattan", "QN" -> "Queens", "SI" -> "Staten Island")
 
-  final val ORIGINAL_COUNT_PATH = "/originalCount";
+  final val ORIGINAL_COUNT_PATH = "/originalCount"
 
   final val CRIME_PROFILE_PATHS = Map(CMPLNT_NUM -> "/count", DATE -> "/dates", OFFENSE_DESC -> "/offense_descs", LEVEL -> "/levels", BOROUGH -> "/boroughs",
     SUSPECT_AGE -> "/suspect_age", SUSPECT_RACE -> "/suspect_race", SUSPECT_SEX -> "/suspect_sex")
