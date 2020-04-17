@@ -7,11 +7,9 @@ import util.CommonConstants._
 
 object SubwayProcess {
 
-  def process(sc: SparkContext, hdfs: FileSystem, cleanedSubwayPath: String, processedPlutoData: List[Map[String, String]]): RDD[(String, Double)] = {
-
+  def process(sc: SparkContext, hdfs: FileSystem, cleanedSubwayPath: String, processedPlutoData: List[Map[String, String]]): RDD[(String, (Double, (String, String)))] = {
     val subwayData = sc.textFile(cleanedSubwayPath).map(_.split(SPLIT_REGEX))
       .map(x => Map(OBJECT_ID -> x(0), LATITUDE -> x(2), LONGITUDE -> x(3), LEVEL -> DEFAULT_LEVEL))
-
     val totalSubwayScore = subwayData.count()
 
     ProcessUtil.getScoresForData(sc, subwayData, totalSubwayScore, processedPlutoData, (level: String) => level.toDouble)

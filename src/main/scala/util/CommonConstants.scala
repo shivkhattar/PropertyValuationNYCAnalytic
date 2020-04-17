@@ -8,17 +8,29 @@ object CommonConstants {
 
   final val PLUTO_PATH = "/pluto.csv"
 
+  final val EDUCATION_PATH = "/education.csv"
+
+  final val PROPERTY_PATH = "/property.csv"
+
   final val CLEANED_CRIME_PATH = "/output/cleaned/crime"
 
   final val CLEANED_SUBWAY_PATH = "/output/cleaned/subway"
 
   final val CLEANED_PLUTO_PATH = "/output/cleaned/pluto"
 
+  final val CLEANED_EDUCATION_PATH = "/output/cleaned/education"
+
+  final val CLEANED_PROPERTY_PATH = "/output/cleaned/property"
+
   final val PROFILE_CRIME_PATH = "/output/profiled/crime"
 
   final val PROFILE_SUBWAY_PATH = "/output/profiled/subway"
 
   final val PROFILE_PLUTO_PATH = "/output/profiled/pluto"
+
+  final val PROFILED_EDUCATION_PATH = "/output/profiled/education"
+
+  final val PROFILED_PROPERTY_PATH = "/output/profiled/property"
 
   final val UNKNOWN = "UNKNOWN"
 
@@ -111,18 +123,6 @@ object CommonConstants {
 
   final val COUNT_KEY = "Count"
 
-  final val EDUCATION_PATH = "/education.csv"
-
-  final val PROPERTY_PATH = "/property.csv"
-
-  final val CLEANED_EDUCATION_PATH = "/output/cleaned/education"
-
-  final val CLEANED_PROPERTY_PATH = "/output/cleaned/property"
-
-  final val PROFILED_EDUCATION_PATH = "/output/profiled/education"
-
-  final val PROFILED_PROPERTY_PATH = "/output/profiled/property"
-
   final val PROP_BORO = "BORO"
 
   final val PROP_BLOCK = "BLOCK"
@@ -182,4 +182,6 @@ object CommonConstants {
   final val RANGE_IN_KM : Double = 1
 
   final val ZERO_SCORE: Double = 0
+
+  final val FINAL_HEADING = List(("Borough_Block", "Latitude", "Longitude", "Crime Score", "Subway Score", "Education Score"))
 }

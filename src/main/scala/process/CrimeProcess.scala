@@ -7,7 +7,7 @@ import util.CommonConstants._
 
 object CrimeProcess {
 
-  def process(sc: SparkContext, hdfs: FileSystem, cleanedCrimePath: String, processedPlutoData: List[Map[String, String]]): RDD[(String, Double)] = {
+  def process(sc: SparkContext, hdfs: FileSystem, cleanedCrimePath: String, processedPlutoData: List[Map[String, String]]): RDD[(String, (Double, (String, String)))] = {
     val crimeData = sc.textFile(cleanedCrimePath)
       .map(_.split(SPLIT_REGEX))
       .map(x => Map(CMPLNT_NUM -> x(0), LEVEL -> x(3), LATITUDE -> x(5), LONGITUDE -> x(6)))
