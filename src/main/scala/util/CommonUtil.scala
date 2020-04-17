@@ -3,7 +3,7 @@ package util
 import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
-import util.CommonConstants.{COUNT_KEY, LINE, PROFILER_SEPARATOR, UNKNOWN, ORIGINAL_COUNT_PATH, RADIUS_OF_EARTH_IN_KM, RANGE_IN_KM}
+import util.CommonConstants.{BOROUGH_BLOCK, COUNT_KEY, LATITUDE, LEVEL, LINE, LONGITUDE, ORIGINAL_COUNT_PATH, PROFILER_SEPARATOR, RADIUS_OF_EARTH_IN_KM, RANGE_IN_KM, UNKNOWN, ZERO_SCORE}
 
 object CommonUtil {
 
@@ -43,17 +43,5 @@ object CommonUtil {
     val originalData = sc.textFile(originalInputPath).map(x => Map(LINE -> x));
     val originalCount = getTotalCount(originalData);
     originalCount.saveAsTextFile(outputPath + ORIGINAL_COUNT_PATH)
-  }
-
-  def inRange(distance: Double): Boolean = distance < RANGE_IN_KM
-
-  // location = (latitude, longitude)
-  def calculateDistance(location1: (String, String), location2: (String, String)): Double = {
-    val location1InRadians = (location1._1.toDouble.toRadians, location1._2.toDouble.toRadians)
-    val location2InRadians = (location2._1.toDouble.toRadians, location2._2.toDouble.toRadians)
-    val difference = (location2InRadians._1 - location1InRadians._1, location2InRadians._2 - location1InRadians._2)
-    val result = RADIUS_OF_EARTH_IN_KM * 2 * math.asin(math.sqrt(math.pow(math.sin(difference._1 / 2), 2)
-      + math.cos(location1InRadians._1) * math.cos(location2InRadians._1) * math.pow(math.sin(difference._2 / 2), 2)))
-    result
   }
 }

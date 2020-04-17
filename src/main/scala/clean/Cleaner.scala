@@ -28,7 +28,7 @@ object Cleaner {
     now = System.currentTimeMillis()
     val educationInputPath = path + EDUCATION_PATH
     val educationOutputPath = path + CLEANED_EDUCATION_PATH
-    //EducationClean.clean(sc, hdfs, educationInputPath, educationOutputPath)
+    EducationClean.clean(sc, hdfs, educationInputPath, educationOutputPath)
     println("Education Cleaning took: " + (System.currentTimeMillis() - now) + " msecs")
 
     now = System.currentTimeMillis()
