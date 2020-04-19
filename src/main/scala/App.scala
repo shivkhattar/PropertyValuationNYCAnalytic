@@ -1,9 +1,7 @@
 import clean.Cleaner
-import org.apache.spark.SparkContext
-import org.apache.spark.SparkConf
+import profile.Profiler
 import org.apache.spark.sql.SparkSession
 import org.apache.hadoop.fs.FileSystem
-import profile.Profiler
 import process.Processor
 import util.CommonConstants.FILE_SEPARATOR
 
@@ -12,27 +10,18 @@ object App {
     val start = System.currentTimeMillis()
     val inputPath = getInputPath(args)
     val sess = SparkSession.builder()
-      .master("local[5]")
+      .master("yarn")
       .appName("PropertyValueAnalytic")
       .getOrCreate()
 
-    /*
-    val conf = new SparkConf().
-      setMaster("local[5]").
-      setAppName("PropertyValueAnalytic")
-     */
-
     val sc = sess.sparkContext
     sc.setLogLevel("ERROR")
-
-    //val sc = new SparkContext(conf)
-    //sc.setLogLevel("ERROR")
 
     val hdfs = FileSystem.get(sc.hadoopConfiguration)
 
 //    Cleaner.clean(sc, hdfs, inputPath)
 //    Profiler.profile(sc, hdfs, inputPath)
-    Processor.preprocess(sc, hdfs, sess, inputPath)
+    Processor.preprocess(sc, hdfs, inputPath)
     sc.stop()
     println("Total Application time: " + (System.currentTimeMillis() - start) + " msecs")
 
