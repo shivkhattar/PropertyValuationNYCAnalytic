@@ -1,8 +1,7 @@
 import clean.Cleaner
-import org.apache.spark.SparkContext
-import org.apache.spark.SparkConf
-import org.apache.hadoop.fs.FileSystem
 import profile.Profiler
+import org.apache.spark.sql.SparkSession
+import org.apache.hadoop.fs.FileSystem
 import process.Processor
 import util.CommonConstants.FILE_SEPARATOR
 
@@ -10,11 +9,12 @@ object App {
   def main(args: Array[String]): Unit = {
     val start = System.currentTimeMillis()
     val inputPath = getInputPath(args)
-    val conf = new SparkConf().
-      setMaster("local[5]").
-      setAppName("PropertyValueAnalytic")
+    val sess = SparkSession.builder()
+      .master("yarn")
+      .appName("PropertyValueAnalytic")
+      .getOrCreate()
 
-    val sc = new SparkContext(conf)
+    val sc = sess.sparkContext
     sc.setLogLevel("ERROR")
 
     val hdfs = FileSystem.get(sc.hadoopConfiguration)
