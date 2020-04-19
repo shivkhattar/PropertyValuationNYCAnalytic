@@ -1,12 +1,11 @@
 package process
 
-import org.apache.hadoop.fs.FileSystem
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
 import util.CommonConstants.{BOROUGH_BLOCK, LATITUDE, LONGITUDE, SPLIT_REGEX}
 
 object PlutoProcess {
-  def normalizeLatLongFromRDD(sc: SparkContext, hdfs: FileSystem, cleanedPlutoFilesPath: String): List[Map[String, String]] = {
+  def normalizeLatLongFromRDD(sc: SparkContext, cleanedPlutoFilesPath: String): List[Map[String, String]] = {
     val inputRDD = sc.textFile(cleanedPlutoFilesPath).map(_.split(SPLIT_REGEX))
       .map(x => (x(1) + "_" + x(3), (x(7), x(8))))
       .groupByKey()

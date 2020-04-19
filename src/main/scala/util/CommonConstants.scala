@@ -32,6 +32,8 @@ object CommonConstants {
 
   final val PROFILED_PROPERTY_PATH = "/output/profiled/property"
 
+  final val PROCESSED_DATA_PATH = "/output/processed"
+
   final val UNKNOWN = "UNKNOWN"
 
   final val SPLIT_REGEX = ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"
@@ -183,5 +185,5 @@ object CommonConstants {
 
   final val ZERO_SCORE: Double = 0
 
-  final val FINAL_HEADING = List(("Borough_Block", "Latitude", "Longitude", "Crime Score", "Subway Score", "Education Score"))
+  final val FINAL_HEADING = List(("Borough_Block", "Latitude", "Longitude", "Crime Score", "Subway Score", "Education Score", "Average Property Price"))
 }
