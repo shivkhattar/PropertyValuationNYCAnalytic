@@ -7,12 +7,15 @@ import util.CommonConstants.{BOROUGH_BLOCK, LATITUDE, LEVEL, LONGITUDE, RADIUS_O
 object ProcessUtil {
 
   def getScoresForData(sc: SparkContext, data: RDD[Map[String, String]], totalScore: Double, processedPlutoData: List[Map[String, String]], getScore: String => Double): RDD[(String, (Double, (String, String)))] = {
-    val crimeScoreRDD = data.map(row => processedPlutoData
+    val scoreRDD = data.map(row => processedPlutoData
       .map(y => (y(BOROUGH_BLOCK), calculateDistance((row(LATITUDE), row(LONGITUDE)), (y(LATITUDE), y(LONGITUDE))), getScore(row(LEVEL).trim)))
       .minBy(_._2))
-      .map(x => (x._1, if (inRange(x._2)) x._3 else ZERO_SCORE)).reduceByKey(_ + _).map(x => (x._1, (x._2.toDouble * 100) / totalScore))
+      .map(x => (x._1, if (inRange(x._2)) x._3 else ZERO_SCORE)).reduceByKey(_ + _).map(x => (x._1, x._2.toDouble / totalScore))
+
+    val max = scoreRDD.map(x => ("max", x._2)).reduceByKey(math.max(_, _)).map(_._2).collect()(0)
+    val finalScoreRDD = scoreRDD.map(x => (x._1, x._2 * 10 / max))
     val plutoRDD = getRDDForPlutoData(sc, processedPlutoData)
-    crimeScoreRDD.rightOuterJoin(plutoRDD).mapValues(option => if (option._1.isEmpty) (ZERO_SCORE, option._2) else (option._1.get, option._2))
+    finalScoreRDD.rightOuterJoin(plutoRDD).mapValues(option => if (option._1.isEmpty) (ZERO_SCORE, option._2) else (option._1.get, option._2))
   }
 
   private def inRange(distance: Double): Boolean = distance < RANGE_IN_KM
