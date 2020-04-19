@@ -27,7 +27,7 @@ object Processor {
     val propertyRDD = PropertyProcess.process(sc, cleanedPropertyPath)
 
     now = System.currentTimeMillis()
-    val joined = crimeRDD.join(subwayRDD).mapValues(x => (x._1._1, x._2._1, x._1._2)).join(educationRDD).map(x => (x._1, x._2._1._3._1, x._2._1._3._2, x._2._1._1.toString, x._2._1._2.toString, x._2._2._1.toString))
+    val joined = crimeRDD.join(subwayRDD).mapValues(x => (x._1._1, x._2._1, x._1._2)).join(educationRDD).map(x => (x._1, x._2._1._3._1, x._2._1._3._2, x._2._1._1.toString, x._2._1._2.toString, x._2._2._1.toString))//.join(propertyRDD)
     val finalRDD = sc.parallelize(FINAL_HEADING).union(joined)
     finalRDD.saveAsTextFile(path+"/final")
     println("Final processing took: " + (System.currentTimeMillis() - now) + " msecs")

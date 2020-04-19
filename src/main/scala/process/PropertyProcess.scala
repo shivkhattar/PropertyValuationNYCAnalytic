@@ -1,17 +1,15 @@
 package process
-
 import org.apache.spark.SparkContext
-import util.CommonConstants.{SPLIT_REGEX}
+import org.apache.spark.rdd.RDD
+import util.CommonConstants.SPLIT_REGEX
 
 object PropertyProcess {
-  def process(sc: SparkContext, cleanedPropertyPath: String): Unit = {
-    val propertyData = sc.textFile(cleanedPropertyPath).map(_.split(SPLIT_REGEX))
+  def process(sc: SparkContext, cleanedPropertyPath: String): RDD[(String,Double)] = {
+    sc.textFile(cleanedPropertyPath).map(_.split(SPLIT_REGEX))
       .map(x => (x(3) + "_" + x(4), x(2).toDouble))
       .groupByKey()
       .map(row => (row._1, row._2.to[Seq].toList))
       .map(r => (r._1, removeOutliers(r._2)))
-
-    println(propertyData.count())
   }
 
 
@@ -25,8 +23,7 @@ object PropertyProcess {
     val lowerRange = Q1 - 1.5 * IQR
     val upperRange = Q3 + 1.5 * IQR
     val outliersRemoved = sortedList.filter(prop_price => prop_price >= lowerRange && prop_price < upperRange)
-    val averagePropertyValue = meanElements(outliersRemoved)
-    averagePropertyValue
+    meanElements(outliersRemoved)
   }
 
   def getMedianIndex(left: Int, right: Int): Int = {
