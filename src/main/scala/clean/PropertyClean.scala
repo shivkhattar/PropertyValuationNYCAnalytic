@@ -15,11 +15,11 @@ object PropertyClean extends Clean {
     val columnsRemoved = data.map(_.split(SPLIT_REGEX))
       .filter(x => x.length == 139 && x(7).equals("2020"))
       .map(x => Map(PROP_PARID -> x(0), PROP_BORO -> x(1), PROP_BLOCK -> x(2), PROP_LOT -> x(3), PROP_EASEMENT -> x(4), PROP_ZIPCODE -> x(77), PROP_YRBUILT -> x(90), PROP_ZONING -> x(73),
-        PROP_CURMKTTOT -> x(57)))
+        PROP_CURMKTTOT -> x(57), PROP_AREA -> x(88)))
 
     val cleanedProperty = columnsRemoved.filter(row => !row(PROP_PARID).isEmpty && !row(PROP_ZIPCODE).isEmpty && !row(PROP_CURMKTTOT).isEmpty && !row(PROP_BORO).isEmpty
-      && !row(PROP_BLOCK).isEmpty && !row(PROP_LOT).isEmpty && !row(PROP_CURMKTTOT).equals("0"))
-    val tupledProp = cleanedProperty.map(row => (row(PROP_PARID), row(PROP_ZIPCODE), row(PROP_CURMKTTOT), row(PROP_BORO), row(PROP_BLOCK), row(PROP_LOT), row(PROP_ZONING), row(PROP_YRBUILT)))
+      && !row(PROP_BLOCK).isEmpty && !row(PROP_LOT).isEmpty && !row(PROP_CURMKTTOT).equals("0") && !row(PROP_AREA).equals("0"))
+    val tupledProp = cleanedProperty.map(row => (row(PROP_PARID), row(PROP_ZIPCODE), row(PROP_CURMKTTOT), row(PROP_BORO), row(PROP_BLOCK), row(PROP_LOT), row(PROP_ZONING), row(PROP_YRBUILT), row(PROP_AREA)))
       .map(tup => tup.toString.substring(1, tup.toString.length - 1))
 
     CommonUtil.deleteFolderIfAlreadyExists(hdfs, outputPath)

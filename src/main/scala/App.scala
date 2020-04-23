@@ -1,6 +1,7 @@
 import org.apache.spark.sql.SparkSession
 import org.apache.hadoop.fs.FileSystem
 import process.Processor
+import clean.Cleaner
 import util.CommonConstants.FILE_SEPARATOR
 
 object App {
