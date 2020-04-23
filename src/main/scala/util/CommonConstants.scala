@@ -145,6 +145,8 @@ object CommonConstants {
 
   final val PROP_ZONING = "ZONING"
 
+  final val PROP_AREA = "AREA"
+
   final val ED_ATS_SYSTEM_CODE = "ATS_SYSTEM_CODE"
 
   final val ED_LOCATION_NAME = "LOCATION_NAME"

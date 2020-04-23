@@ -47,9 +47,7 @@ object PropertyProfile extends Profile {
   }
 
   private def getMaxPropertyVal(data: RDD[Map[String, String]]): Long = {
-    data.map(row => {println(row(PROP_CURMKTTOT));
-                      (row(PROP_CURMKTTOT)).toLong
-    }).max
+    data.map(row => row(PROP_CURMKTTOT).toLong).max
   }
 
   private def getMinPropertyVal(data: RDD[Map[String, String]]): Long = {

@@ -6,7 +6,7 @@ import util.CommonConstants.SPLIT_REGEX
 object PropertyProcess {
   def process(sc: SparkContext, cleanedPropertyPath: String): RDD[(String,Double)] = {
     sc.textFile(cleanedPropertyPath).map(_.split(SPLIT_REGEX))
-      .map(x => (x(3) + "_" + x(4), x(2).toDouble))
+      .map(x => (x(3) + "_" + x(4), x(2).toDouble/x(8).toDouble))
       .groupByKey()
       .map(row => (row._1, row._2.to[Seq].toList))
       .map(r => (r._1, removeOutliers(r._2)))
