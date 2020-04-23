@@ -11,18 +11,20 @@ object Processor {
     var now = System.currentTimeMillis()
 
     val cleanedPlutoPath = path + CLEANED_PLUTO_PATH
-    val plutoData = PlutoProcess.normalizeLatLongFromRDD(sc, cleanedPlutoPath)
+    val plutoRDDAndData = PlutoProcess.normalizeLatLongFromRDD(sc, cleanedPlutoPath)
     println("Pluto preprocessing took: " + (System.currentTimeMillis() - now) + " msecs")
 
+    val plutoRDD = plutoRDDAndData._1;
+    val plutoData = plutoRDDAndData._2;
     now = System.currentTimeMillis()
     val cleanedSubwayPath = path + CLEANED_SUBWAY_PATH
-    val subwayRDD = SubwayProcess.process(sc, cleanedSubwayPath, plutoData)
+    val subwayRDD = SubwayProcess.process(sc, cleanedSubwayPath, plutoRDD, plutoData)
 
     val cleanedCrimePath = path + CLEANED_CRIME_PATH + "2"
-    val crimeRDD = CrimeProcess.process(sc, cleanedCrimePath, plutoData)
+    val crimeRDD = CrimeProcess.process(sc, cleanedCrimePath, plutoRDD, plutoData)
 
     val cleanedEducationPath = path + CLEANED_EDUCATION_PATH
-    val educationRDD = EducationProcess.process(sc, cleanedEducationPath, plutoData)
+    val educationRDD = EducationProcess.process(sc, cleanedEducationPath, plutoRDD, plutoData)
 
     val cleanedPropertyPath = path + CLEANED_PROPERTY_PATH
     val propertyRDD = PropertyProcess.process(sc, cleanedPropertyPath)
@@ -31,7 +33,7 @@ object Processor {
     val finalProcessedPath = path + PROCESSED_DATA_PATH
     deleteFolderIfAlreadyExists(hdfs, finalProcessedPath)
 
-    //Joining all RDDs; Final format: ("Borough_Block", "Latitude", "Longitude", "Crime Score", "Subway Score", "Education Score", "Average Property Price")
+    // Joining all RDDs; Final format: ("Borough_Block", "Latitude", "Longitude", "Crime Score", "Subway Score", "Education Score", "Average Property Price")
     val joined = crimeRDD.join(subwayRDD).mapValues(x => (x._1._1, x._2._1, x._1._2))
       .join(educationRDD).map(x => (x._1, (x._2._1._3._1, x._2._1._3._2, x._2._1._1.toString, x._2._1._2.toString, x._2._2._1.toString)))
       .join(propertyRDD).map(x => (x._1, x._2._1._1, x._2._1._2, x._2._1._3, x._2._1._4, x._2._1._5, x._2._2.toString))

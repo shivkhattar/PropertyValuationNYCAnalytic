@@ -1,5 +1,3 @@
-import clean.Cleaner
-import profile.Profiler
 import org.apache.spark.sql.SparkSession
 import org.apache.hadoop.fs.FileSystem
 import process.Processor
@@ -10,7 +8,7 @@ object App {
     val start = System.currentTimeMillis()
     val inputPath = getInputPath(args)
     val sess = SparkSession.builder()
-      .master("yarn")
+      .master("local[5]")
       .appName("PropertyValueAnalytic")
       .getOrCreate()
 
