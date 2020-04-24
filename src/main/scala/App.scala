@@ -2,7 +2,7 @@ import org.apache.spark.sql.SparkSession
 import org.apache.hadoop.fs.FileSystem
 import process.Processor
 import util.CommonConstants.FILE_SEPARATOR
-
+import clean.Cleaner
 object App {
   def main(args: Array[String]): Unit = {
     val start = System.currentTimeMillis()
@@ -17,9 +17,9 @@ object App {
 
     val hdfs = FileSystem.get(sc.hadoopConfiguration)
 
-//    Cleaner.clean(sc, hdfs, inputPath)
+   // Cleaner.clean(sc, hdfs, inputPath)
 //    Profiler.profile(sc, hdfs, inputPath)
-    Processor.preprocess(sc, hdfs, inputPath)
+    Processor.process(sc, hdfs, inputPath)
     sc.stop()
     println("Total Application time: " + (System.currentTimeMillis() - start) + " msecs")
 

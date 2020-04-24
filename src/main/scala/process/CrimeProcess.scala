@@ -11,8 +11,7 @@ object CrimeProcess {
     val crimeData = sc.textFile(cleanedCrimePath)
       .map(_.split(SPLIT_REGEX))
       .map(x => Map(CMPLNT_NUM -> x(0), LEVEL -> x(3), LATITUDE -> x(5), LONGITUDE -> x(6)))
-    val totalCrimeScore = crimeData.map(x => ("score", getScoreForLevel(x(LEVEL).trim))).reduceByKey(_ + _).map(_._2).collect()(0)
-    ProcessUtil.getScoresForData(sc, crimeData, totalCrimeScore, processedPlutoRDD, processedPlutoData, getScoreForLevel)
+    ProcessUtil.getScoresForData(sc, crimeData, processedPlutoRDD, processedPlutoData, getScoreForLevel)
   }
 
   def getScoreForLevel(level: String): Double = {
