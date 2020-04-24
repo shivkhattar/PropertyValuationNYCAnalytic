@@ -9,9 +9,10 @@ object PropertyProcess {
       .map(x => (x(3) + "_" + x(4), x(2).toDouble/x(8).toDouble))
       .groupByKey()
       .map(row => (row._1, row._2.to[Seq].toList))
-      .map(r => (r._1, removeOutliers(r._2)))
+      .map(r => { if(r._2.length > 2) (r._1, removeOutliers(r._2))
+                  else (r._1, meanElements(r._2))})
+      .filter(_._2 > 0.0)
   }
-
 
   def removeOutliers(inputList: List[Double]): Double = {
     val size = inputList.size
@@ -32,5 +33,9 @@ object PropertyProcess {
     n + left
   }
 
-  def meanElements(list: List[Double]): Double = list.sum / list.length
+  def meanElements(list: List[Double]): Double = {
+    if( list.length == 0 )
+      return 0.0
+    else list.sum / list.length
+  }
 }
