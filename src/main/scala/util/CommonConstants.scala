@@ -32,7 +32,9 @@ object CommonConstants {
 
   final val PROFILED_PROPERTY_PATH = "/output/profiled/property"
 
-  final val PROCESSED_DATA_PATH = "/output/processed"
+  final val PROCESSED_BB_DATA_PATH = "/output/processed/boroughBlock"
+
+  final val PROCESSED_ZIPCODE_DATA_PATH = "/output/processed/zipcode"
 
   final val UNKNOWN = "UNKNOWN"
 
@@ -187,5 +189,8 @@ object CommonConstants {
 
   final val ZERO_SCORE: Double = 0
 
-  final val FINAL_HEADING = List(("Borough_Block", "Latitude", "Longitude", "Crime Score", "Subway Score", "Education Score", "Average Property Price"))
+  final val FINAL_BB_HEADING = List(("Borough_Block", "Crime Score", "Subway Score", "Education Score", "Average Property Price", "Latitude", "Longitude"))
+
+  final val FINAL_ZIPCODE_HEADING = List(("ZipCode", "Crime Score", "Subway Score", "Education Score", "Average Property Price"))
+
 }

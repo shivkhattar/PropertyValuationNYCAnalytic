@@ -10,8 +10,6 @@ object EducationProcess {
     val educationData = sc.textFile(cleanedEducationPath).map(_.split(SPLIT_REGEX))
       .map(x => Map(ED_ATS_SYSTEM_CODE -> x(0), LATITUDE -> x(2), LONGITUDE -> x(3), LEVEL -> DEFAULT_LEVEL))
 
-    val totalEducationScore = educationData.count()
-
-    ProcessUtil.getScoresForData(sc, educationData, totalEducationScore, processedPlutoRDD, processedPlutoData, (level: String) => level.toDouble)
+    ProcessUtil.getScoresForData(sc, educationData, processedPlutoRDD, processedPlutoData, (level: String) => level.toDouble)
   }
 }
