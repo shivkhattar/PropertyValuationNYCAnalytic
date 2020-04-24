@@ -2,11 +2,12 @@ package process
 
 import org.apache.hadoop.fs.FileSystem
 import org.apache.spark.SparkContext
+import org.apache.spark.sql.SparkSession
 import util.CommonConstants.{CLEANED_CRIME_PATH, CLEANED_EDUCATION_PATH, CLEANED_PLUTO_PATH, CLEANED_PROPERTY_PATH, CLEANED_SUBWAY_PATH}
 
 object Processor {
 
-  def process(sc: SparkContext, hdfs: FileSystem, path: String): Unit = {
+  def process(sess: SparkSession, sc: SparkContext, hdfs: FileSystem, path: String): Unit = {
     val now = System.currentTimeMillis()
 
     val cleanedPlutoPath = path + CLEANED_PLUTO_PATH
@@ -28,6 +29,6 @@ object Processor {
     val cleanedPropertyPath = path + CLEANED_PROPERTY_PATH
     val propertyRDD = PropertyProcess.process(sc, cleanedPropertyPath)
 
-    AnalyticGenerator.generateAnalytic(sc, hdfs, path, cleanedPlutoPath, subwayRDD, crimeRDD, educationRDD, propertyRDD)
+    AnalyticGenerator.generateAnalytic(sess, sc, hdfs, path, cleanedPlutoPath, subwayRDD, crimeRDD, educationRDD, propertyRDD)
   }
 }
