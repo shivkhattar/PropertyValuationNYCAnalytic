@@ -3,6 +3,7 @@ package process
 import org.apache.hadoop.fs.FileSystem
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
+import org.apache.spark.sql.SparkSession
 import util.CommonConstants.{FINAL_BB_HEADING, FINAL_ZIPCODE_HEADING, PROCESSED_BB_DATA_PATH, PROCESSED_ZIPCODE_DATA_PATH}
 import util.CommonUtil.deleteFolderIfAlreadyExists
 
@@ -22,6 +23,13 @@ object AnalyticGenerator {
   private def boroughBlockAnalytic(sc: SparkContext, hdfs: FileSystem, path: String, subwayRDD: RDD[(String, (Double, (String, String)))], crimeRDD: RDD[(String, (Double, (String, String)))], educationRDD: RDD[(String, (Double, (String, String)))], propertyRDD: RDD[(String, Double)]) = {
     val processedBBData = path + PROCESSED_BB_DATA_PATH
     deleteFolderIfAlreadyExists(hdfs, processedBBData)
+
+    /*val crimeDF = crimeRDD.toDF()
+    val subwayDF = subwayRDD.toDF()
+    val educationDF = educationRDD.toDF()
+    val propertyDF = propertyRDD.toDF()
+
+    crimeDF.join(subwayDF).join(educationDF).join(propertyDF).printSchema()*/
 
     val BBAnalyticRDD = crimeRDD.join(subwayRDD).mapValues(x => (x._1._1, x._2._1, x._1._2))
       .join(educationRDD).mapValues(x => (x._1._1, x._1._2, x._2._1, x._1._3))
