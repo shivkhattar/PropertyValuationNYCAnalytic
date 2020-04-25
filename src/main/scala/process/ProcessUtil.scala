@@ -8,16 +8,21 @@ object ProcessUtil {
 
   def getScoresForData(sc: SparkContext, data: RDD[Map[String, String]], processedPlutoRDD: RDD[Map[String, String]],
                        processedPlutoData: List[Map[String, String]], getScore: String => Double): RDD[(String, (Double, (String, String)))] = {
-    val scoreRDD = data.map(row => processedPlutoData
-      .map(y => (y(BOROUGH_BLOCK), calculateDistance((row(LATITUDE), row(LONGITUDE)), (y(LATITUDE), y(LONGITUDE))), getScore(row(LEVEL).trim))))
-      .flatMap(x => x.map(y => y))
-      .map(x => (x._1, getScoreBasedOnDistance(x._2, x._3))).reduceByKey(_ + _)
+    val scoreRDD = data.map(row => processedPlutoData.filter(y => inRange(calculateDistance((row(LATITUDE), row(LONGITUDE)), (y(LATITUDE), y(LONGITUDE)))))
+      .map(y => (y(BOROUGH_BLOCK), getScoreBasedOnDistance(calculateDistance((row(LATITUDE), row(LONGITUDE)), (y(LATITUDE), y(LONGITUDE))), getScore(row(LEVEL))))))
+      .flatMap(row => row.map(y => (y._1, y._2))).reduceByKey(_ + _)
 
-    val max = scoreRDD.map(x => ("max", x._2)).reduceByKey(math.max(_, _)).map(_._2).collect()(0)
-    val finalScoreRDD = scoreRDD.map(x => (x._1, x._2 * 10 / max))
+    val total = scoreRDD.map(x => ("total", x._2)).reduceByKey(_ + _).collect()(0)._2;
+
+    val finalScoreRDD = scoreRDD.map(x => (x._1, x._2 / total))
+    val max_min = finalScoreRDD.map(x => ("max_min", (x._2, x._2)))
+      .reduceByKey((d1, d2) => (math.max(d1._1, d2._1), math.min(d1._2, d2._2))).map(_._2).collect()(0)
+    val final2 = finalScoreRDD.map(x => (x._1, 10 * ((x._2 - max_min._2) / (max_min._1 - max_min._2))))
     val plutoRDD = processedPlutoRDD.map(y => (y(BOROUGH_BLOCK), (y(LATITUDE), y(LONGITUDE))))
-    finalScoreRDD.rightOuterJoin(plutoRDD).mapValues(option => if (option._1.isEmpty) (ZERO_SCORE, option._2) else (option._1.get, option._2))
+    final2.rightOuterJoin(plutoRDD).mapValues(option => if (option._1.isEmpty) (ZERO_SCORE, option._2) else (option._1.get, option._2))
   }
+
+  private def inRange(distance: Double) = distance <= RANGE_IN_KM
 
   // location = (latitude, longitude)
   private def calculateDistance(location1: (String, String), location2: (String, String)): Double = {

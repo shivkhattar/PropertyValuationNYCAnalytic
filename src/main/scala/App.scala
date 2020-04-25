@@ -3,27 +3,31 @@ import org.apache.hadoop.fs.FileSystem
 import process.Processor
 import util.CommonConstants.FILE_SEPARATOR
 import clean.Cleaner
+import org.apache.spark.{SparkConf, SparkContext}
+import profile.Profiler
+
 object App {
   def main(args: Array[String]): Unit = {
     val start = System.currentTimeMillis()
     val inputPath = getInputPath(args)
-    val sess = SparkSession.builder()
-      .master("local[5]")
-      .appName("PropertyValueAnalytic")
-      .getOrCreate()
 
-    val sc = sess.sparkContext
+    val conf = new SparkConf().setMaster("yarn").setAppName("PropertyValueAnalytic")
+
+    //    val sess = SparkSession.builder()
+    //      .master("yarn")
+    //      .appName("PropertyValueAnalytic")
+    //      .getOrCreate()
+
+    val sc = new SparkContext(conf)
     sc.setLogLevel("ERROR")
 
     val hdfs = FileSystem.get(sc.hadoopConfiguration)
 
-   // Cleaner.clean(sc, hdfs, inputPath)
-//    Profiler.profile(sc, hdfs, inputPath)
+    //Cleaner.clean(sc, hdfs, inputPath)
+    //Profiler.profile(sc, hdfs, inputPath)
     Processor.process(sc, hdfs, inputPath)
     sc.stop()
     println("Total Application time: " + (System.currentTimeMillis() - start) + " msecs")
-
-
   }
 
   private def checkArguments(args: Array[String]): Unit = {
