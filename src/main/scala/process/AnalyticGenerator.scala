@@ -25,10 +25,9 @@ object AnalyticGenerator {
 
     val BBAnalyticRDD = crimeRDD.join(subwayRDD).mapValues(x => (x._1._1, x._2._1, x._1._2))
       .join(educationRDD).mapValues(x => (x._1._1, x._1._2, x._2._1, x._1._3))
-      .join(propertyRDD).mapValues(x => (x._1._1, x._1._2, x._1._3, x._2, x._1._4._1, x._1._4._2))
+      .join(propertyRDD).mapValues(x => (x._1._1, x._1._2, x._1._3, x._2, x._1._4._1, x._1._4._2)).sortBy(_._2._4)
 
-    val processedBbRDD = sc.parallelize(FINAL_BB_HEADING)
-      .union(BBAnalyticRDD.map(x => (x._1, x._2._1.toString, x._2._2.toString, x._2._3.toString, x._2._4.toString, x._2._5, x._2._6)))
+    val processedBbRDD = BBAnalyticRDD
       .map(x => x.toString().substring(1, x.toString().length - 1))
 
     processedBbRDD.saveAsTextFile(processedBBData)
@@ -46,9 +45,9 @@ object AnalyticGenerator {
       .flatMap(x => x._1.map((_, (x._2, 1.0))))
       .reduceByKey((d1, d2) => ((d1._1._1 + d2._1._1, d1._1._2 + d2._1._2, d1._1._3 + d2._1._3, d1._1._4 + d2._1._4), d1._2 + d2._2))
       .mapValues(x => (x._1._1 / x._2, x._1._2 / x._2, x._1._3 / x._2, x._1._4 / x._2))
-      .map(x => (x._1, x._2._1.toString, x._2._2.toString, x._2._3.toString, x._2._4.toString))
+      .map(x => (x._1, x._2._1, x._2._2, x._2._3, x._2._4))
 
-    val processedZipcodeRDD = sc.parallelize(FINAL_ZIPCODE_HEADING).union(zipcodeAnalyticRDD)
+    val processedZipcodeRDD = zipcodeAnalyticRDD
       .map(x => x.toString().substring(1, x.toString().length - 1))
 
     processedZipcodeRDD.saveAsTextFile(processedZipCodePath)

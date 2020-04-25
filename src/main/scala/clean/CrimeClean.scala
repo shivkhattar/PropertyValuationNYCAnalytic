@@ -16,7 +16,8 @@ object CrimeClean extends Clean {
         LATITUDE -> x(27), LONGITUDE -> x(28), X_COORD -> x(21), Y_COORD -> x(22), SUSPECT_AGE -> x(23), SUSPECT_RACE -> x(24), SUSPECT_SEX -> x(25)))
 
     val cleanedCrime = columnsRemoved.filter(row => !row(CMPLNT_NUM).isEmpty && !row(DATE).isEmpty && !row(LATITUDE).isEmpty && !row(LONGITUDE).isEmpty && !row(X_COORD).isEmpty && !row(Y_COORD).isEmpty)
-      .filter(row => row(DATE).trim.substring(6).toInt >= 2015)
+      .filter(row => row(DATE).trim.substring(6).toInt >= 2019)
+
 
     val tupledCrime = cleanedCrime.map(row => (row(CMPLNT_NUM), row(DATE), CommonUtil.updateValueIfBlank(row(OFFENSE_DESC)), CommonUtil.updateValueIfBlank(row(LEVEL)), CommonUtil.updateValueIfBlank(row(BOROUGH)),
       row(LATITUDE), row(LONGITUDE), row(X_COORD), row(Y_COORD), CommonUtil.updateValueIfBlank(getCleanedAgeRange(row(SUSPECT_AGE))), CommonUtil.updateValueIfBlank(row(SUSPECT_RACE)), CommonUtil.updateValueIfBlank(row(SUSPECT_SEX))))

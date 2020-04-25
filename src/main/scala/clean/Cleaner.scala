@@ -10,7 +10,7 @@ object Cleaner {
 
     val crimeInputPath = path + CRIME_PATH
     val crimeOutputPath = path + CLEANED_CRIME_PATH
-    //CrimeClean.clean(sc, hdfs, crimeInputPath, crimeOutputPath)
+    CrimeClean.clean(sc, hdfs, crimeInputPath, crimeOutputPath)
     println("Crime Cleaning took: " + (System.currentTimeMillis() - now) + " msecs")
 
     now = System.currentTimeMillis()
@@ -34,7 +34,7 @@ object Cleaner {
     now = System.currentTimeMillis()
     val propertyInputPath = path + PROPERTY_PATH
     val propertyOutputPath = path + CLEANED_PROPERTY_PATH
-    PropertyClean.clean(sc, hdfs, propertyInputPath, propertyOutputPath)
+    //PropertyClean.clean(sc, hdfs, propertyInputPath, propertyOutputPath)
     println("Property Cleaning took: " + (System.currentTimeMillis() - now) + " msecs")
 
     println("Cleaning Done!")

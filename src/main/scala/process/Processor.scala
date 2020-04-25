@@ -19,7 +19,7 @@ object Processor {
     val cleanedSubwayPath = path + CLEANED_SUBWAY_PATH
     val subwayRDD = SubwayProcess.process(sc, cleanedSubwayPath, plutoRDD, plutoData)
 
-    val cleanedCrimePath = path + CLEANED_CRIME_PATH + "2"
+    val cleanedCrimePath = path + CLEANED_CRIME_PATH
     val crimeRDD = CrimeProcess.process(sc, cleanedCrimePath, plutoRDD, plutoData)
 
     val cleanedEducationPath = path + CLEANED_EDUCATION_PATH
