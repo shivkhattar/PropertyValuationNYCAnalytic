@@ -30,7 +30,7 @@ object AnalyticGenerator {
     val educationDF = educationRDD.toDF()
     val propertyDF = propertyRDD.toDF()
 
-    crimeDF.join(subwayDF).printSchema()
+    crimeDF.join(subwayDF).join(educationDF).join(propertyDF).printSchema()
 
     val BBAnalyticRDD = crimeRDD.join(subwayRDD).mapValues(x => (x._1._1, x._2._1, x._1._2))
       .join(educationRDD).mapValues(x => (x._1._1, x._1._2, x._2._1, x._1._3))
