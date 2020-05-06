@@ -3,8 +3,7 @@ package process
 import org.apache.hadoop.fs.FileSystem
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.SparkSession
-import util.CommonConstants.{FINAL_BB_HEADING, FINAL_ZIPCODE_HEADING, PROCESSED_BB_DATA_PATH, PROCESSED_ZIPCODE_DATA_PATH}
+import util.CommonConstants.{PROCESSED_BB_DATA_PATH, PROCESSED_ZIPCODE_DATA_PATH, SPLIT_REGEX, ZIPCODE_POPULATION_PATH}
 import util.CommonUtil.deleteFolderIfAlreadyExists
 
 object AnalyticGenerator {
@@ -24,18 +23,12 @@ object AnalyticGenerator {
     val processedBBData = path + PROCESSED_BB_DATA_PATH
     deleteFolderIfAlreadyExists(hdfs, processedBBData)
 
-    /*val crimeDF = crimeRDD.toDF()
-    val subwayDF = subwayRDD.toDF()
-    val educationDF = educationRDD.toDF()
-    val propertyDF = propertyRDD.toDF()
-
-    crimeDF.join(subwayDF).join(educationDF).join(propertyDF).printSchema()*/
-
     val BBAnalyticRDD = crimeRDD.join(subwayRDD).mapValues(x => (x._1._1, x._2._1, x._1._2))
       .join(educationRDD).mapValues(x => (x._1._1, x._1._2, x._2._1, x._1._3))
-      .join(propertyRDD).mapValues(x => (x._1._1, x._1._2, x._1._3, x._2, x._1._4._1, x._1._4._2)).sortBy(_._2._4)
+      .join(propertyRDD).mapValues(x => (x._1._1, x._1._2, x._1._3, x._2, x._1._4._1, x._1._4._2))
 
-    val processedBbRDD = BBAnalyticRDD
+
+    val processedBbRDD = BBAnalyticRDD.map(x => (x._1, x._2._1, x._2._2, x._2._3, x._2._4, x._2._5, x._2._6))
       .map(x => x.toString().substring(1, x.toString().length - 1))
 
     processedBbRDD.saveAsTextFile(processedBBData)
@@ -48,12 +41,17 @@ object AnalyticGenerator {
     deleteFolderIfAlreadyExists(hdfs, processedZipCodePath)
 
     val zipCodeRDD = PlutoProcess.getBoroughBlockToZipcodeRDD(sc, cleanedPlutoPath)
+    var zipcodePopulationMap = scala.collection.mutable.Map[String, Double]()
+    val population = sc.textFile(path + ZIPCODE_POPULATION_PATH)
+      .map(_.split(SPLIT_REGEX))
+      .map(x => (x(0), x(1).replace("\"", "").replace(",", "").toDouble))
+      .collect().foreach(x => zipcodePopulationMap += (x._1 -> x._2))
 
     val zipcodeAnalyticRDD = BBAnalyticRDD.join(zipCodeRDD).map(x => (x._2._2, (x._2._1._1, x._2._1._2, x._2._1._3, x._2._1._4)))
       .flatMap(x => x._1.map((_, (x._2, 1.0))))
       .reduceByKey((d1, d2) => ((d1._1._1 + d2._1._1, d1._1._2 + d2._1._2, d1._1._3 + d2._1._3, d1._1._4 + d2._1._4), d1._2 + d2._2))
       .mapValues(x => (x._1._1 / x._2, x._1._2 / x._2, x._1._3 / x._2, x._1._4 / x._2))
-      .map(x => (x._1, x._2._1, x._2._2, x._2._3, x._2._4))
+      .map(x => (x._1, x._2._1, x._2._2, x._2._3, x._2._4, zipcodePopulationMap.getOrElse(x._1, 0.0))).sortBy(_._6)
 
     val processedZipcodeRDD = zipcodeAnalyticRDD
       .map(x => x.toString().substring(1, x.toString().length - 1))

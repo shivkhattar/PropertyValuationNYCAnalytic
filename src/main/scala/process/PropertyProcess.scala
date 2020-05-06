@@ -1,16 +1,19 @@
 package process
+
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
 import util.CommonConstants.SPLIT_REGEX
 
 object PropertyProcess {
-  def process(sc: SparkContext, cleanedPropertyPath: String): RDD[(String,Double)] = {
+  def process(sc: SparkContext, cleanedPropertyPath: String): RDD[(String, Double)] = {
     sc.textFile(cleanedPropertyPath).map(_.split(SPLIT_REGEX))
-      .map(x => (x(3) + "_" + x(4), x(2).toDouble/x(8).toDouble))
+      .map(x => (x(3) + "_" + x(4), x(2).toDouble / x(8).toDouble))
       .groupByKey()
       .map(row => (row._1, row._2.to[Seq].toList))
-      .map(r => { if(r._2.length > 2) (r._1, removeOutliers(r._2))
-                  else (r._1, meanElements(r._2))})
+      .map(r => {
+        if (r._2.length > 2) (r._1, removeOutliers(r._2))
+        else (r._1, meanElements(r._2))
+      })
       .filter(_._2 > 0.0)
   }
 
@@ -34,8 +37,7 @@ object PropertyProcess {
   }
 
   def meanElements(list: List[Double]): Double = {
-    if( list.length == 0 )
-      return 0.0
+    if (list.length == 0) 0.0
     else list.sum / list.length
   }
 }

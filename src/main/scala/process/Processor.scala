@@ -13,8 +13,8 @@ object Processor {
     val plutoRDDAndData = PlutoProcess.normalizeLatLongFromRDD(sc, cleanedPlutoPath)
     println("Pluto preprocessing took: " + (System.currentTimeMillis() - now) + " msecs")
 
-    val plutoRDD = plutoRDDAndData._1;
-    val plutoData = plutoRDDAndData._2;
+    val plutoRDD = plutoRDDAndData._1
+    val plutoData = plutoRDDAndData._2
 
     val cleanedSubwayPath = path + CLEANED_SUBWAY_PATH
     val subwayRDD = SubwayProcess.process(sc, cleanedSubwayPath, plutoRDD, plutoData)

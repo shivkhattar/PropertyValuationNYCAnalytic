@@ -12,6 +12,8 @@ object CommonConstants {
 
   final val PROPERTY_PATH = "/property.csv"
 
+  final val ZIPCODE_POPULATION_PATH = "/zipcodePopulation.csv"
+
   final val CLEANED_CRIME_PATH = "/output/cleaned/crime"
 
   final val CLEANED_SUBWAY_PATH = "/output/cleaned/subway"
@@ -79,6 +81,8 @@ object CommonConstants {
   final val LOT = "LOT"
 
   final val ZIPCODE = "ZIPCODE"
+
+  final val POPULATION = "POPULATION"
 
   final val ADDRESS = "ADDRESS"
 
@@ -191,7 +195,7 @@ object CommonConstants {
 
   final val RADIUS_OF_EARTH_IN_KM: Double = 6371
 
-  final val RANGE_IN_KM : Double = 1.0
+  final val RANGE_IN_KM : Double = 1.5
 
   final val ZERO_SCORE: Double = 0
 
