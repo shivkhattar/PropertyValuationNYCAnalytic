@@ -1,0 +1,12 @@
+Instructions to run Livy Server on Dumbo:
+
+mkdir ~/livy-0.6.0
+cp -r /share/apps/livy/0.6.0/* ~/livy-0.6.0
+mkdir ~/livy-0.6.0/logs
+PORT=$(shuf -i 9000-9999 -n 1)
+sed -i "s/# livy.server.port = 8998/livy.server.port = $PORT/g" ~/livy-0.6.0/conf/livy.conf
+
+export SPARK_HOME=/share/apps/spark/spark-2.3.0-bin-hadoop2.6
+export HADOOP_CONF_DIR=/etc/hadoop/conf.cloudera.yarn
+cd ~/livy-0.6.0
+./bin/livy-server 
