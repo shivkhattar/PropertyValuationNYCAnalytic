@@ -1,0 +1,22 @@
+Shiv Khattar(sk8325) and Rutvik Shah(rss638)
+Relationship between crime, access to educational institutes, subway proximity and property prices in New York City
+
+We developed a Python application, which can be used by the users to review the crime rate, average property price, subway proximity score, and proximity to education scores. This can help the users to gain insightful knowledge about an area if they are considering moving to that area. We utilize Apache Livy[34] for this, which is an open-source service that enables easy interaction with a Spark cluster over a REST interface. 
+
+Actuation 1:
+
+1. We take the zipcode from the user as input and return all the consolidated scores back to the user in a JSON format. We first establish a session with the Livy server on Dumbo and then make a call to the cluster by providing the scala statements in the POST API to the cluster. We then poll for the response and show the response back to the user in a JSON format. 
+
+2. We also developed a UI implementation using a map of New York City and the user can click on an area marked by zip codes, and all the scores and the population will be highlighted to the user. We also give the choice to the user to choose a parameter and a heat map is generated based on that. (We did this in Tableau. Screenshot is attached.)
+
+
+Actuation 2:
+
+3. We also developed a functionality in Python in which the user provides the latitude and longitude of a pinpointed location and we return the scores of the closest block and the zipcode that location belongs to. We utilize Apache Livy for this task as well to execute spark code in the cluster using the REST interface.
+
+Algorithm:
+	1. Using the latitude-longitude provided by the user, we find all the blocks that are in the range of 1km from that location.
+	2. After finding all blocks in the range of that location, we find the closest point and place the location in that block.
+	3. Once we have the block for the location, we return the scores for that specific borough block back to the user.
+
+We believe these implementations can be used by companies like Trulia and Zillow to provide crime rate, proximity to schools, and proximity to subway stations on their web portals when the user is searching for a place. We believe this can definitely help the users in finalizing a place to move to. These implementations can be deployed as web servers in the future and we can expose REST APIs for these companies to call, or a dedicated website showing all this data can be designed and developed as well.

@@ -1,0 +1,21 @@
+Shiv Khattar
+sk8325
+
+Steps I followed to ingest the data:
+
+1. Get a dump of the NYC Complaints Dataset from the website https://data.cityofnewyork.us/Public-Safety/NYPD-Complaint-Data-Historic/qgea-i56i/data into my local drive. Since it was a csv file of 2.14GB, I could download it to my local machine first.
+
+2. Get a dump of the NYC Subway Dataset from the website https://data.cityofnewyork.us/Transportation/Subway-Stations/arq3-7z49 into my local drive. Since it was a csv file of 64KB, I could download it to my local machine first.
+
+3. Get a dump of the NYC Pluto Dataset from the website https://www1.nyc.gov/site/planning/data-maps/open-data/dwn-pluto-mappluto.page into my local drive. Since it was a csv file of 296.6MB, I could download it to my local machine first.
+
+4. I used Fugu to copy the dataset to the dumbo machine into my scratch directory: /scratch/sk8325. (Attached screenshot)
+
+5. I used the copy command to copy the files from /scratch/sk8325 to hdfs. (Attached screenshot)
+	Command used: hdfs dfs -put /scratch/sk8325/crime.csv project
+   				  hdfs dfs -put /scratch/sk8325/subway.csv project
+   				  hdfs dfs -put /scratch/sk8325/pluto.csv project
+
+6. I gave permissions to rss638(project partner) to access the files. (Attached screenshot)
+	Command used: hdfs dfs -setfacl -R -m default:user:rss638:rwx project
+   				  hdfs dfs -setfacl -R -m user:rss638:rwx project
