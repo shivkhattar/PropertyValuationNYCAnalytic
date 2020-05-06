@@ -15,6 +15,6 @@ object CrimeProcess {
   }
 
   def getScoreForLevel(level: String): Double = {
-    if (level.equals("MISDEMEANOR")) 2 else if (level.equals("VIOLATION")) 1 else if (level.equals("FELONY")) 3 else 0
+    if (level.equals("FELONY")) 1 else 0
   }
 }

@@ -1,4 +1,3 @@
-import org.apache.spark.sql.SparkSession
 import org.apache.hadoop.fs.FileSystem
 import process.Processor
 import util.CommonConstants.FILE_SEPARATOR
@@ -12,11 +11,6 @@ object App {
     val inputPath = getInputPath(args)
 
     val conf = new SparkConf().setMaster("yarn").setAppName("PropertyValueAnalytic")
-
-    //    val sess = SparkSession.builder()
-    //      .master("yarn")
-    //      .appName("PropertyValueAnalytic")
-    //      .getOrCreate()
 
     val sc = new SparkContext(conf)
     sc.setLogLevel("ERROR")

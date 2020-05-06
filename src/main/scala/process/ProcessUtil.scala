@@ -8,11 +8,11 @@ object ProcessUtil {
 
   def getScoresForData(sc: SparkContext, data: RDD[Map[String, String]], processedPlutoRDD: RDD[Map[String, String]],
                        processedPlutoData: List[Map[String, String]], getScore: String => Double): RDD[(String, (Double, (String, String)))] = {
-    val scoreRDD = data.map(row => processedPlutoData.filter(y => inRange(calculateDistance((row(LATITUDE), row(LONGITUDE)), (y(LATITUDE), y(LONGITUDE)))))
-      .map(y => (y(BOROUGH_BLOCK), getScoreBasedOnDistance(calculateDistance((row(LATITUDE), row(LONGITUDE)), (y(LATITUDE), y(LONGITUDE))), getScore(row(LEVEL))))))
-      .flatMap(row => row.map(y => (y._1, y._2))).reduceByKey(_ + _)
+    val scoreRDD = data.map(row => (getScore(row(LEVEL)), processedPlutoData.filter(y => inRange(calculateDistance((row(LATITUDE), row(LONGITUDE)), (y(LATITUDE), y(LONGITUDE)))))))
+      .flatMap(row => row._2.map(y => (y(BOROUGH_BLOCK), row._1)))
+      .reduceByKey(_ + _)
 
-    val total = scoreRDD.map(x => ("total", x._2)).reduceByKey(_ + _).collect()(0)._2;
+    val total = scoreRDD.map(x => ("total", x._2)).reduceByKey(_ + _).collect()(0)._2
 
     val finalScoreRDD = scoreRDD.map(x => (x._1, x._2 / total))
     val max_min = finalScoreRDD.map(x => ("max_min", (x._2, x._2)))
@@ -31,12 +31,5 @@ object ProcessUtil {
     val difference = (location2InRadians._1 - location1InRadians._1, location2InRadians._2 - location1InRadians._2)
     RADIUS_OF_EARTH_IN_KM * 2 * math.asin(math.sqrt(math.pow(math.sin(difference._1 / 2), 2)
       + math.cos(location1InRadians._1) * math.cos(location2InRadians._1) * math.pow(math.sin(difference._2 / 2), 2)))
-  }
-
-  private def getScoreBasedOnDistance(distance: Double, score: Double): Double = {
-    if (distance <= RANGE_IN_KM / 3) score * 3.0
-    else if (distance <= RANGE_IN_KM / 2) score * 2.0
-    else if (distance <= RANGE_IN_KM) score
-    else ZERO_SCORE
   }
 }

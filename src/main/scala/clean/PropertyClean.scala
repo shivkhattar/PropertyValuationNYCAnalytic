@@ -9,7 +9,7 @@ object PropertyClean extends Clean {
 
   def clean(sc: SparkContext, hdfs: FileSystem, inputPath: String, outputPath: String): Unit = {
 
-    val data = sc.textFile(inputPath)
+    val data = sc.textFile(inputPath, 10)
       .filter(!_.startsWith(PROP_PARID)).map(d => if (d.endsWith(",")) d.concat(UNKNOWN) else d)
 
     val columnsRemoved = data.map(_.split(SPLIT_REGEX))
@@ -18,9 +18,7 @@ object PropertyClean extends Clean {
         PROP_CURMKTTOT -> x(57), PROP_AREA -> x(88), PROP_ISRESIDENTIAL -> x(110), PROP_RESIDENTIAL_AREA -> x(124), PROP_CONSTRUCTED_AREA -> x(121)))
 
     val cleanedProperty = columnsRemoved.filter(row => !row(PROP_PARID).isEmpty && !row(PROP_ZIPCODE).isEmpty && !row(PROP_CURMKTTOT).isEmpty && !row(PROP_BORO).isEmpty
-      && !row(PROP_BLOCK).isEmpty && !row(PROP_LOT).isEmpty && !row(PROP_CURMKTTOT).equals("0") && !row(PROP_AREA).isEmpty && !row(PROP_AREA).equals("0") &&
-      (row(PROP_ISRESIDENTIAL).equalsIgnoreCase("R")
-        || (!row(PROP_CONSTRUCTED_AREA).isEmpty && !row(PROP_RESIDENTIAL_AREA).isEmpty && row(PROP_RESIDENTIAL_AREA).toDouble/row(PROP_CONSTRUCTED_AREA).toDouble > 0.5)))
+      && !row(PROP_BLOCK).isEmpty && !row(PROP_LOT).isEmpty && !row(PROP_CURMKTTOT).equals("0") && !row(PROP_AREA).isEmpty && !row(PROP_AREA).equals("0"))
     val tupledProp = cleanedProperty.map(row => (row(PROP_PARID), row(PROP_ZIPCODE), row(PROP_CURMKTTOT), row(PROP_BORO), row(PROP_BLOCK), row(PROP_LOT), row(PROP_ZONING), row(PROP_YRBUILT), row(PROP_AREA)))
       .map(tup => tup.toString.substring(1, tup.toString.length - 1))
 

@@ -16,25 +16,25 @@ object Cleaner {
     now = System.currentTimeMillis()
     val subwayInputPath = path + SUBWAY_PATH
     val subwayOutputPath = path + CLEANED_SUBWAY_PATH
-    //SubwayClean.clean(sc, hdfs, subwayInputPath, subwayOutputPath)
+    SubwayClean.clean(sc, hdfs, subwayInputPath, subwayOutputPath)
     println("Subway Cleaning took: " + (System.currentTimeMillis() - now) + " msecs")
 
     now = System.currentTimeMillis()
     val plutoInputPath = path + PLUTO_PATH
     val plutoOutputPath = path + CLEANED_PLUTO_PATH
-    //PlutoClean.clean(sc, hdfs, plutoInputPath, plutoOutputPath)
+    PlutoClean.clean(sc, hdfs, plutoInputPath, plutoOutputPath)
     println("Pluto Cleaning took: " + (System.currentTimeMillis() - now) + " msecs")
 
     now = System.currentTimeMillis()
     val educationInputPath = path + EDUCATION_PATH
     val educationOutputPath = path + CLEANED_EDUCATION_PATH
-    //EducationClean.clean(sc, hdfs, educationInputPath, educationOutputPath)
+    EducationClean.clean(sc, hdfs, educationInputPath, educationOutputPath)
     println("Education Cleaning took: " + (System.currentTimeMillis() - now) + " msecs")
 
     now = System.currentTimeMillis()
     val propertyInputPath = path + PROPERTY_PATH
     val propertyOutputPath = path + CLEANED_PROPERTY_PATH
-    //PropertyClean.clean(sc, hdfs, propertyInputPath, propertyOutputPath)
+    PropertyClean.clean(sc, hdfs, propertyInputPath, propertyOutputPath)
     println("Property Cleaning took: " + (System.currentTimeMillis() - now) + " msecs")
 
     println("Cleaning Done!")
