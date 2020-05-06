@@ -5,6 +5,8 @@ import org.apache.spark.rdd.RDD
 import util.CommonConstants.SPLIT_REGEX
 
 object PropertyProcess {
+  //  Function to preprocess Property data by removing outlier values from each borough-block/ zip code
+  //  in order to normalize the average property prices in the locality under analysis.
   def process(sc: SparkContext, cleanedPropertyPath: String): RDD[(String, Double)] = {
     sc.textFile(cleanedPropertyPath).map(_.split(SPLIT_REGEX))
       .map(x => (x(3) + "_" + x(4), x(2).toDouble / x(8).toDouble))
@@ -17,6 +19,8 @@ object PropertyProcess {
       .filter(_._2 > 0.0)
   }
 
+  //  Helper function to remove outliers based on Box and whisker plot, by keeping only those values between
+  //  {25th percentile - 1.5 times Inter-quartile range} (IQR) and {75th percentile + 1.5 times IQR}
   def removeOutliers(inputList: List[Double]): Double = {
     val size = inputList.size
     val sortedList = inputList.sorted
@@ -30,12 +34,14 @@ object PropertyProcess {
     meanElements(outliersRemoved)
   }
 
+  //  Helper function to return the index of the median value in a given range of indices.
   def getMedianIndex(left: Int, right: Int): Int = {
     var n = right - left + 1
     n = (n + 1) / 2 - 1
     n + left
   }
 
+  //  Helper function to return mean of a list.
   def meanElements(list: List[Double]): Double = {
     if (list.length == 0) 0.0
     else list.sum / list.length
