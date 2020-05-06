@@ -17,7 +17,7 @@ object App {
     val start = System.currentTimeMillis()
     val inputPath = getInputPath(args)
 
-    val conf = new SparkConf().setMaster("local[5]").setAppName("PropertyValueAnalytic")
+    val conf = new SparkConf().setMaster("yarn").setAppName("PropertyValueAnalytic")
     val sc = new SparkContext(conf)
     sc.setLogLevel("ERROR")
 
