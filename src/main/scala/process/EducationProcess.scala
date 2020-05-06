@@ -10,6 +10,7 @@ object EducationProcess {
     val educationData = sc.textFile(cleanedEducationPath).map(_.split(SPLIT_REGEX))
       .map(x => Map(ED_ATS_SYSTEM_CODE -> x(0), LATITUDE -> x(2), LONGITUDE -> x(3), LEVEL -> DEFAULT_LEVEL))
 
+    //  Call utility function to merge cleaned Education data with pluto Data based on latitude and longitude.
     ProcessUtil.getScoresForData(sc, educationData, processedPlutoRDD, processedPlutoData, (level: String) => level.toDouble)
   }
 }
