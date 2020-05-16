@@ -1,0 +1,31 @@
+Rutvik Shah
+rss638
+
+Data ingest steps:
+
+1. Download "NYC Property Valuation and Assessment Data" from NYC OpenData using the following link - https://data.cityofnewyork.us/City-Government/Property-Valuation-and-Assessment-Data-Tax-Classes/8y4t-faws
+
+The file size for the Property Valuation and Assessment Data is 1.03 GB, with around 2250348 rows and 139 columns.
+
+2. Download "2017 - 2018 School Locations" from NYC OpenData using the following link - https://data.cityofnewyork.us/Education/2017-2018-School-Locations/p6h4-mpyy
+
+The file size for the School Locations Data is 1.01 MB, with 1823 rows and 39 columns.
+
+3. Use SCP to copy these two datasets to Dumbo in the scratch folder. Also transfer the JAR file for the program from the local machine to Dumbo, using the following commands: 
+	i. 	scp ./education.csv rss638@dumbo.hpc.nyu.edu:/scratch/rss638
+	ii.	scp ./property.csv rss638@dumbo.hpc.nyu.edu:/scratch/rss638
+	iii.scp /mnt/c/Users/rss16/Documents/PropertyValuationNYCAnalytic/target/scala-2.11/PropertyValueAnalytic-assembly-1.0.0.jar rss638@dumbo.hpc.nyu.edu:/home/rss638
+
+4. Login to Dumbo using ssh: ssh rss638@dumbo.hpc.nyu.edu
+
+5. Transfer these datasets from the scratch folder to the HDFS using the following commands:
+	i.	hdfs dfs -mkdir /user/rss638/project
+	ii.	hdfs dfs -put /scratch/rss638/education.csv /user/rss638/project
+	iii.hdfs dfs -put /scratch/rss638/property.csv /user/rss638/project
+
+6. Run the JAR file created using intelliJ:
+	spark2-submit --class AppR PropertyValueAnalytic-assembly-1.0.0.jar /user/rss638/project/
+
+7. Give access to sk8325 (project partner) to access the files:
+	i.	hdfs dfs -setfacl -R -m default:user:sk8325:rwx project
+	ii. hdfs dfs -setfacl -R -m user:sk8325:rwx project
