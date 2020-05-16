@@ -15,10 +15,8 @@ object ProcessUtil {
   def getScoresForData(sc: SparkContext, data: RDD[Map[String, String]], processedPlutoRDD: RDD[Map[String, String]],
                        processedPlutoData: List[Map[String, String]], getScore: String => Double): RDD[(String, (Double, (String, String)))] = {
 
-    //  Read the data and find the borough-block which is in range of each record in the data
-    //  Add the score to that borough-block
-    //  Flatmap all the borough-block and score records
-    //  Reduce to add scores of each borough-block
+    //  Read the data and find the borough-block which is in range of each record in the data, add the score to that borough-block
+    //  Flatmap all the borough-block and score records and reduce to add scores of each borough-block
     val scoreRDD = data.map(row => (getScore(row(LEVEL)), processedPlutoData.filter(y => inRange(calculateDistance((row(LATITUDE), row(LONGITUDE)), (y(LATITUDE), y(LONGITUDE)))))))
       .flatMap(row => row._2.map(y => (y(BOROUGH_BLOCK), row._1)))
       .reduceByKey(_ + _)
@@ -35,13 +33,13 @@ object ProcessUtil {
 
     //  Normalize the scores by subtracting each score by the minimum score and dividing by the difference between maximumScore and minimum score
     //  Multiple by 10 to bring the scores on a scale of 10
-    val final2 = finalScoreRDD.map(x => (x._1, 10 * ((x._2 - max_min._2) / (max_min._1 - max_min._2))))
+    val normalizedRDD = finalScoreRDD.map(x => (x._1, 10 * ((x._2 - max_min._2) / (max_min._1 - max_min._2))))
 
     //  Get the processed pluto RDD with all borough-block and their latitude-longitude pairs
     val plutoRDD = processedPlutoRDD.map(y => (y(BOROUGH_BLOCK), (y(LATITUDE), y(LONGITUDE))))
 
     //Join the final scores with all borough-blocks and assign a ZERO score for each borough-block that is not found
-    final2.rightOuterJoin(plutoRDD).mapValues(option => if (option._1.isEmpty) (ZERO_SCORE, option._2) else (option._1.get, option._2))
+    normalizedRDD.rightOuterJoin(plutoRDD).mapValues(option => if (option._1.isEmpty) (ZERO_SCORE, option._2) else (option._1.get, option._2))
   }
 
   //  Helper function that returns a true if the distance is in range of 1.5kms
